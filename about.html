@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="assets/styles.css">
     
     <style>
-        /* About Page Specific Styles */
         .about-hero {
             background: linear-gradient(rgba(0, 77, 64, 0.85), rgba(0, 77, 64, 0.85)), url('https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1350&q=80');
             background-size: cover; background-position: center; color: white; text-align: center; padding: 60px 20px;
@@ -54,10 +53,11 @@
             <a class="nav-item" href="dashboard.html">Home</a>
             <a class="nav-item" href="collection.html">ശേഖരം</a>
             <a class="nav-item" href="contact.html">Contact</a>
+            
             <div class="user-profile" id="user-profile-btn">
                 <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small">
-                    <span style="color: white; font-size: 0.85em;">സ്വാഗതം, <span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                    <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
                     <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
@@ -86,21 +86,9 @@
         </div>
         
         <div class="features-grid">
-            <div class="feature-card">
-                <i class="fas fa-book-reader feature-icon"></i>
-                <h3>വിപുലമായ ശേഖരം</h3>
-                <p>കഥകൾ, കവിതകൾ, നോവലുകൾ തുടങ്ങി നിരവധി വിഭാഗങ്ങളിലുള്ള പുസ്തകങ്ങൾ.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-mobile-alt feature-icon"></i>
-                <h3>എവിടെയും വായിക്കാം</h3>
-                <p>മൊബൈലിലോ ലാപ്ടോപ്പിലോ എളുപ്പത്തിൽ ഉപയോഗിക്കാവുന്ന ലളിതമായ ഡിസൈൻ.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-history feature-icon"></i>
-                <h3>വായനാ ചരിത്രം</h3>
-                <p>നിങ്ങൾ വായിച്ച പുസ്തകങ്ങൾ ഓട്ടോമാറ്റിക് ആയി സേവ് ചെയ്യപ്പെടുന്നു.</p>
-            </div>
+            <div class="feature-card"><i class="fas fa-book-reader feature-icon"></i><h3>വിപുലമായ ശേഖരം</h3><p>കഥകൾ, കവിതകൾ, നോവലുകൾ തുടങ്ങി നിരവധി വിഭാഗങ്ങളിലുള്ള പുസ്തകങ്ങൾ.</p></div>
+            <div class="feature-card"><i class="fas fa-mobile-alt feature-icon"></i><h3>എവിടെയും വായിക്കാം</h3><p>മൊബൈലിലോ ലാപ്ടോപ്പിലോ എളുപ്പത്തിൽ ഉപയോഗിക്കാവുന്ന ലളിതമായ ഡിസൈൻ.</p></div>
+            <div class="feature-card"><i class="fas fa-history feature-icon"></i><h3>വായനാ ചരിത്രം</h3><p>നിങ്ങൾ വായിച്ച പുസ്തകങ്ങൾ ഓട്ടോമാറ്റിക് ആയി സേവ് ചെയ്യപ്പെടുന്നു.</p></div>
         </div>
     </div>
 </div>
@@ -122,7 +110,7 @@
 <script src="assets/scripts.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
     
     const firebaseConfig = { apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", authDomain: "thripudilibrary.firebaseapp.com", projectId: "thripudilibrary", storageBucket: "thripudilibrary.firebasestorage.app", messagingSenderId: "887018912750", appId: "1:887018912750:web:cc05190a72b13db816acff" };
     const app = initializeApp(firebaseConfig);
@@ -134,12 +122,24 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
+            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്ത്";
             userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
         } else {
             window.location.href = "login.html";
         }
     });
+
+    const profileBtn = document.getElementById('user-profile-btn');
+    const dropdown = document.getElementById('profile-dropdown');
+    profileBtn.onclick = (e) => {
+        e.stopPropagation();
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    };
+    window.onclick = () => { dropdown.style.display = 'none'; };
+
+    window.logoutUser = () => {
+        signOut(auth).then(() => { window.location.href = "logout_success.html"; });
+    };
 </script>
 </body>
 </html>

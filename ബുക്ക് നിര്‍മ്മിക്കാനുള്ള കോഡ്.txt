@@ -1,0 +1,66 @@
+function generateProjectV_FinalMaster() {
+  var folderId = "നിങ്ങളുടെ_ഫോൾഡർ_ഐഡി";
+  var customFileName = "changampuzha"; 
+  var pageHeaderTitle = "ചങ്ങമ്പുഴ കൃതികൾ"; 
+  
+  var mainFolder = DriveApp.getFolderById(folderId);
+  var fileDataArray = [];
+  
+  function fetchFilesRecursive(folder) {
+    var files = folder.getFiles();
+    while (files.hasNext()) {
+      var file = files.next();
+      var name = file.getName(), type = '', btnText = '', thumb = '';
+      if (name.match(/\.(mp3|m4a)$/i)) { 
+        type = 'audio'; btnText = 'കേൾക്കാം'; 
+        thumb = 'assets/cover/' + (Math.floor(Math.random()*100)+1) + '.JPG';
+      }
+      else if (name.match(/\.(mp4)$/i)) { 
+        type = 'video'; btnText = 'കാണാം'; 
+        thumb = "https://lh3.googleusercontent.com/d/" + file.getId() + "=s400";
+      }
+      else if (name.match(/\.(pdf)$/i)) { 
+        type = 'pdf'; btnText = 'വായിക്കാം'; 
+        thumb = "https://lh3.googleusercontent.com/d/" + file.getId() + "=s400";
+      }
+      else continue;
+      fileDataArray.push({ id: file.getId(), name: name.replace(/\.[^/.]+$/, ""), type: type, btnText: btnText, thumb: thumb });
+    }
+    var subFolders = folder.getFolders();
+    while (subFolders.hasNext()) { fetchFilesRecursive(subFolders.next()); }
+  }
+  fetchFilesRecursive(mainFolder);
+
+  var allFilesHtml = fileDataArray.map(function(item) {
+    var cardId = 'card-' + item.id;
+    return '<div class="book-card" id="' + cardId + '"><div class="image-wrapper">' +
+           '<img class="book-cover" src="' + item.thumb + '">' +
+           '<div class="read-overlay"><button class="overlay-btn" onclick="checkAccess(\''+item.id+'\', \''+item.type+'\', \''+cardId+'\')">'+item.btnText+'</button></div>' +
+           '<div class="audio-player-box" id="player-' + item.id + '"></div></div>' +
+           '<div class="book-title">'+item.name+'</div></div>';
+  }).join('\n');
+
+  var html = '<!DOCTYPE html>\n<html lang="ml">\n<head>\n';
+  html += '<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0">\n';
+  html += '<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">\n';
+  html += '<link rel="stylesheet" href="assets/styles.css">\n';
+  html += '<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>\n';
+  html += '<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>\n';
+  html += '</head>\n<body>\n';
+
+  html += '<header><div class="container navbar"><a href="dashboard.html" class="logo-container"><span class="logo-text">THRIPUDI LIBRARY</span><img src="assets/cover/logo.png" class="logo-img"></a><div class="nav-links"><a class="nav-item" href="dashboard.html">Home</a><a class="nav-item" href="collection.html">ശേഖരം</a><a class="nav-item" href="about.html">About</a><a class="nav-item" href="contact.html">Contact</a><div class="user-profile" id="user-profile-btn"><img id="user-avatar-img" class="user-avatar-small"><span><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span><div class="profile-dropdown" id="profile-dropdown"><a href="settings.html">Settings</a><a href="history.html">History</a><a href="javascript:void(0)" onclick="logoutUser()" style="color:red;">Logout</a></div></div></div></div></header>\n';
+
+  html += '<section class="collection-section"><div class="container"><h1 style="color:#004D40; text-align:center;">' + pageHeaderTitle + '</h1><div class="library-container">' + (allFilesHtml || '<p>ഫയലുകൾ ലഭ്യമല്ല</p>') + '</div></div></section>\n';
+
+  html += '<div id="loginAlertModal"><div class="popup-box"><img src="assets/cover/logo.png" style="height:45px; margin-bottom:10px;"><h3 style="color:#004D40; margin:5px 0;">ത്രിപുടി ലൈബ്രറി</h3><p id="loginMsg" style="font-weight:600;"></p><br><div style="display:flex; justify-content:center; gap:15px;"><a href="login.html" id="login-btn-link" style="padding:10px 25px; background:#00897B; color:white; text-decoration:none; border-radius:5px; font-weight:600;">ലോഗിൻ ചെയ്യൂ</a><button onclick="closeLoginPopup()" style="padding:10px 25px; border:none; background:#eee; border-radius:5px; cursor:pointer; color:#555;">ഇപ്പോൾ വേണ്ട</button></div></div></div>';
+
+  html += '<div id="videoOverlay" class="video-popup-overlay"><div class="video-window"><button class="close-video-btn" onclick="closeVideo()"><i class="fas fa-arrow-left"></i></button><div id="videoFrameContainer" style="width:100%; height:100%; position:relative;"></div></div></div>';
+
+  html += '<div id="pdfModal"><div id="modalHeader"><span>ത്രിപുടി ലൈബ്രറി - വായനമുറി</span><button onclick="closePdfModal()" style="color:white; background:none; border:none; cursor:pointer; font-size:1.5em;"><i class="fas fa-times"></i></button></div><div class="iframe-container"><div class="player-mask" style="width:60px; height:60px;"></div><iframe id="pdfFrame" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe></div></div>';
+
+  // --- COMPACT FOOTER UI ---
+  html += '<footer><div class="container footer-content"><div class="footer-line-one"><a href="#" class="social-icon"><i class="fab fa-facebook"></i></a><a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a><span class="footer-divider">|</span><a href="privacy.html">സ്വകാര്യതാ നയം</a><span class="footer-divider">|</span><a href="terms.html">നിബന്ധനകൾ</a></div><div class="footer-line-two">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</div></div></footer>';
+
+  html += '<script src="assets/scripts.js"></script></body></html>';
+  mainFolder.createFile(customFileName + ".html", html, MimeType.HTML);
+}

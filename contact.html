@@ -50,10 +50,11 @@
             <a class="nav-item" href="dashboard.html">Home</a>
             <a class="nav-item" href="collection.html">ശേഖരം</a>
             <a class="nav-item" href="about.html">About</a>
+            
             <div class="user-profile" id="user-profile-btn">
                 <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small">
-                    <span style="color: white; font-size: 0.85em;">സ്വാഗതം, <span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                    <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
                     <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
@@ -138,13 +139,28 @@
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
-            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
+            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്ത്";
             userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
         } else {
             window.location.href = "login.html";
         }
     });
 
+    // Logout Function
+    window.logoutUser = () => {
+        signOut(auth).then(() => { window.location.href = "logout_success.html"; });
+    };
+
+    // Dropdown Logic
+    const profileBtn = document.getElementById('user-profile-btn');
+    const dropdown = document.getElementById('profile-dropdown');
+    profileBtn.onclick = (e) => {
+        e.stopPropagation();
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    };
+    window.onclick = () => { dropdown.style.display = 'none'; };
+
+    // Form Submit Logic
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw8b1l6poc0fDGAVXZRV1LQW8_TXS0ozu0rxjHDzHx0P32zBfk4UcSDcdu9q16KL91lLw/exec"; 
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {

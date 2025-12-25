@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>സ്വകാര്യതാ നയം | THRIPUDI LIBRARY</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="assets/styles.css">
+    
+    <style>
+        .policy-section { padding: 40px 0; flex: 1; }
+        .policy-content {
+            background-color: white; padding: 40px; border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); border: 3px solid var(--outline-color);
+            max-width: 1000px; margin: 0 auto;
+        }
+        .policy-content h1 {
+            color: var(--secondary-dark); border-bottom: 3px solid var(--primary-teal);
+            display: inline-block; padding-bottom: 5px; margin-bottom: 25px; font-size: 1.8em;
+        }
+        .policy-content h2 { color: var(--primary-teal); font-size: 1.3em; margin-top: 25px; margin-bottom: 10px; }
+        .policy-content p, .policy-content li { color: #455A64; font-size: 0.95em; line-height: 1.7; text-align: justify; }
+        .policy-content ul { padding-left: 20px; margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .policy-content { padding: 25px; }
+            .policy-content h1 { font-size: 1.5em; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container navbar">
+        <a href="dashboard.html" class="logo-container">
+            <span class="logo-text">THRIPUDI LIBRARY</span>
+            <img src="assets/cover/logo.png" alt="Logo" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a class="nav-item" href="dashboard.html">Home</a>
+            <a class="nav-item" href="collection.html">ശേഖരം</a>
+            <a class="nav-item" href="about.html">About</a>
+            
+            <div class="user-profile" id="user-profile-btn">
+                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+                    <img id="user-avatar-img" class="user-avatar-small">
+                    <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="policy-section">
+    <div class="container">
+        <div class="policy-content">
+            <h1>സ്വകാര്യതാ നയം</h1>
+            <p><strong>അവസാനം പുതുക്കിയത്: 2025</strong></p>
+            <p>തൃപുടി ലൈബ്രറി സന്ദർശിക്കുന്ന ഓരോ വായനക്കാരന്റെയും സ്വകാര്യത ഞങ്ങൾ മാനിക്കുന്നു. ഈ വെബ്സൈറ്റ് ഉപയോഗിക്കുമ്പോൾ നിങ്ങളുടെ വിവരങ്ങൾ എങ്ങനെ കൈകാര്യം ചെയ്യുന്നുവെന്ന് താഴെ വിവരിക്കുന്നു.</p>
+            
+            <h2>1. വിവര ശേഖരണം</h2>
+            <ul>
+                <li><strong>വ്യക്തിഗത വിവരങ്ങൾ:</strong> നിങ്ങൾ ലോഗിൻ ചെയ്യുമ്പോഴോ സന്ദേശങ്ങൾ അയക്കുമ്പോഴോ നൽകുന്ന പേര്, ഇമെയിൽ വിലാസം തുടങ്ങിയവ.</li>
+                <li><strong>സാങ്കേതിക വിവരങ്ങൾ:</strong> ലോഗിൻ സുരക്ഷയ്ക്കായി ഉപയോഗിക്കുന്ന ഐ.പി വിലാസം, ബ്രൗസർ വിവരങ്ങൾ എന്നിവ.</li>
+            </ul>
+
+            <h2>2. വിവരങ്ങളുടെ ഉപയോഗം</h2>
+            <p>നിങ്ങൾക്ക് മികച്ച വായനാനുഭവം നൽകാനും, അക്കൗണ്ട് സുരക്ഷിതമായി സൂക്ഷിക്കാനും മാത്രമാണ് ഈ വിവരങ്ങൾ ഉപയോഗിക്കുന്നത്.</p>
+
+            <h2 style="color: var(--primary-teal); border-top: 1px solid #eee; padding-top: 15px;">📧 cplibrarycp@gmail.com</h2>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container footer-content">
+        <div class="footer-line-one">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <span class="footer-divider">|</span>
+            <a href="privacy.html">സ്വകാര്യതാ നയം</a>
+            <span class="footer-divider">|</span>
+            <a href="terms.html">നിബന്ധനകൾ</a>
+        </div>
+        <div class="footer-line-two">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</div>
+    </div>
+</footer>
+
+<script src="assets/scripts.js"></script>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    
+    const firebaseConfig = { apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", authDomain: "thripudilibrary.firebaseapp.com", projectId: "thripudilibrary", storageBucket: "thripudilibrary.firebasestorage.app", messagingSenderId: "887018912750", appId: "1:887018912750:web:cc05190a72b13db816acff" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const userAvatarImg = document.getElementById('user-avatar-img');
+    const dName = document.getElementById('display-name');
+    const defaultUserImg = 'assets/cover/default_user.jpg';
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്ത്";
+            userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    // Dropdown Logic
+    const profileBtn = document.getElementById('user-profile-btn');
+    const dropdown = document.getElementById('profile-dropdown');
+    profileBtn.onclick = (e) => {
+        e.stopPropagation();
+        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+    };
+    window.onclick = () => { dropdown.style.display = 'none'; };
+
+    window.logoutUser = () => {
+        signOut(auth).then(() => { window.location.href = "logout_success.html"; });
+    };
+</script>
+</body>
+</html>

@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// Access & Modal Logics (പഴയതുപോലെ തുടരുന്നു)
+// Access & Modal Logics with Automatic History Update
 window.checkAccess = function(id, type, cardId) {
     if (!auth.currentUser) {
         let msg = "ലോഗിൻ ചെയ്യുക";
@@ -54,7 +54,28 @@ window.checkAccess = function(id, type, cardId) {
         document.getElementById('login-btn-link').href = `login.html?redirect=${currentPage}`;
         document.getElementById('loginAlertModal').style.setProperty('display', 'flex', 'important');
     } else {
-        // Player Logics...
+        // --- ഹസ്റ്ററി സേവ് ചെയ്യാനുള്ള സ്മാർട്ട് ലോജിക് ---
+        // നിലവിലുള്ള പേജുകളിലെ കാർഡിൽ നിന്ന് പേരും ചിത്രവും സ്ക്രിപ്റ്റ് സ്വയം എടുക്കുന്നു
+        const cardElement = document.getElementById(cardId);
+        const bName = cardElement.querySelector('.book-title').innerText;
+        const bThumb = cardElement.querySelector('.book-cover').src;
+        const uid = auth.currentUser.uid;
+
+        let history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
+        // ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കാൻ പഴയ ലിസ്റ്റിൽ നിന്ന് നീക്കുന്നു
+        history = history.filter(item => item.id !== id);
+        
+        history.push({
+            id: id,
+            name: bName,
+            thumb: bThumb,
+            date: new Date().toLocaleDateString('ml-IN')
+        });
+
+        if (history.length > 20) history.shift();
+        localStorage.setItem('thripudi_history_' + uid, JSON.stringify(history));
+
+        // --- പ്ലെയർ തുറക്കാനുള്ള ലോജിക് ---
         if (type === 'audio') {
             if (currentAudioId && currentAudioId !== id) {
                 document.getElementById('player-' + currentAudioId).innerHTML = "";

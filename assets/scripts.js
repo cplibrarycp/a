@@ -66,3 +66,23 @@ function logoutUser() { auth.signOut().then(() => { window.location.href = "logo
 function closeLoginPopup() { document.getElementById('loginAlertModal').style.setProperty('display', 'none', 'important'); }
 function closeVideo() { document.getElementById('videoOverlay').style.display = 'none'; document.getElementById('videoFrameContainer').innerHTML = ""; document.body.style.overflow = "auto"; }
 function closePdfModal() { document.getElementById('pdfModal').style.display = 'none'; document.getElementById('pdfFrame').src = ""; document.body.style.overflow = "auto"; }
+function saveToHistory(id, name, thumb) {
+    if (!auth.currentUser) return;
+    const uid = auth.currentUser.uid;
+    let history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
+    
+    // പഴയ ഹിസ്റ്ററി ഉണ്ടെങ്കിൽ ഡ്യൂപ്ലിക്കേഷൻ ഒഴിവാക്കുന്നു
+    history = history.filter(item => item.id !== id);
+    
+    history.push({
+        id: id,
+        name: name,
+        thumb: thumb,
+        date: new Date().toLocaleDateString('ml-IN')
+    });
+
+    // പരമാവധി 20 എണ്ണം മാത്രം സൂക്ഷിക്കുന്നു
+    if (history.length > 20) history.shift();
+    
+    localStorage.setItem('thripudi_history_' + uid, JSON.stringify(history));
+}

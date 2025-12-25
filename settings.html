@@ -14,6 +14,8 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 450px; 
             margin: 0 auto; text-align: center; border: 4px solid var(--outline-color); 
         }
+        
+        /* ഫോട്ടോ അപ്‌ലോഡ് ഏരിയ */
         .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 20px; cursor: pointer; }
         .avatar-circle { 
             width: 100%; height: 100%; background: var(--background-light); 
@@ -26,14 +28,19 @@
             color: white; width: 32px; height: 32px; border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; border: 2px solid white;
         }
+
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 700; color: var(--secondary-dark); font-size: 0.85em; }
-        input { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; }
+        input { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary-teal); }
+        input:disabled { background: #f9f9f9; cursor: not-allowed; }
+
         .btn-update { 
             background: var(--primary-teal); color: white; border: none; 
             padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; 
             cursor: pointer; margin-top: 10px; transition: 0.3s;
         }
+        .btn-update:hover { background: var(--secondary-dark); }
         .btn-update:disabled { background: #ccc; cursor: not-allowed; }
         #fileInput { display: none; }
     </style>
@@ -49,6 +56,9 @@
         <div class="nav-links">
             <a class="nav-item" href="dashboard.html">Home</a>
             <a class="nav-item" href="collection.html">ശേഖരം</a>
+            <a class="nav-item" href="about.html">About</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+            
             <div class="user-profile" id="user-profile-btn">
                 <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small">
@@ -74,7 +84,9 @@
                 <div class="upload-hint"><i class="fas fa-camera"></i></div>
                 <input type="file" id="fileInput" accept="image/*">
             </div>
+
             <h2 style="color: var(--secondary-dark); margin-bottom: 20px;">പ്രൊഫൈൽ ക്രമീകരണങ്ങൾ</h2>
+            
             <div class="form-group">
                 <label>ഇമെയിൽ</label>
                 <input type="text" id="emailBox" disabled>
@@ -83,6 +95,7 @@
                 <label>പേര് (Display Name)</label>
                 <input type="text" id="nameBox" placeholder="നിങ്ങളുടെ പേര്">
             </div>
+            
             <button class="btn-update" id="saveBtn">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
             <div id="msg" style="margin-top:15px; font-size:0.85em; font-weight:600;"></div>
         </div>
@@ -92,9 +105,14 @@
 <footer>
     <div class="container footer-content">
         <div class="footer-line-one">
-            <a href="privacy.html">സ്വകാര്യതാ നയം</a> | <a href="terms.html">നിബന്ധനകൾ</a>
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <span class="footer-divider">|</span>
+            <a href="privacy.html">സ്വകാര്യതാ നയം</a>
+            <span class="footer-divider">|</span>
+            <a href="terms.html">നിബന്ധനകൾ</a>
         </div>
-        <div class="footer-line-two">© 2025 THRIPUDI LIBRARY.</div>
+        <div class="footer-line-two">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</div>
     </div>
 </footer>
 

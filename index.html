@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>ത്രിപുടി ഡിജിറ്റൽ ലൈബ്രറി</title>
+  
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+  <link href="css/style.css" rel="stylesheet" />
+
+  <style>
+    :root { 
+      --thripudi-teal: #004d40; 
+      --thripudi-gold: #ffbe33; 
+      --card-bg: #00332c; 
+      --text-white: #ffffff;
+    }
+    
+    body { 
+      background-color: var(--thripudi-teal); 
+      color: var(--text-white); 
+      font-family: 'Poppins', sans-serif; 
+      overflow-x: hidden; 
+    }
+    
+    .thripudi-logo { font-size: 2.2rem; font-weight: bold; color: var(--thripudi-gold); text-decoration: none; }
+
+    /* ഹെഡർ */
+    .header_section { 
+      background: #002d26; 
+      padding: 15px 0; 
+      border-bottom: 2px solid var(--thripudi-gold); 
+    }
+    .nav-container { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+    }
+    
+    .nav-links-group { 
+      display: flex; 
+      gap: 12px; 
+      align-items: center;
+    }
+    
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.1); color: #fff !important; padding: 8px 18px; border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.2); font-weight: 500; font-size: 0.8rem; text-transform: uppercase;
+      transition: 0.3s; text-decoration: none;
+    }
+    .nav-btn:hover, .nav-btn.active { 
+      background: var(--thripudi-gold); 
+      color: #000 !important; 
+      border-color: var(--thripudi-gold); 
+    }
+
+    /* സ്മൂത്ത് ആനിമേഷൻ */
+    .auto-scroll-wrapper { 
+      overflow: hidden; 
+      width: 100%; 
+      position: relative; 
+      padding: 30px 0;
+      transform: translate3d(0, 0, 0);
+    }
+    .scroll-content {
+      display: flex; 
+      gap: 20px; 
+      width: max-content;
+      animation: autoScroll 50s linear infinite;
+      will-change: transform;
+    }
+    .scroll-content:hover { animation-play-state: paused; }
+
+    @keyframes autoScroll {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-50%, 0, 0); }
+    }
+
+    /* പുസ്തക കാർഡ് - മൗസ് വെക്കുമ്പോൾ കട്ടി കൂടുന്ന ബോർഡർ */
+    .book-card {
+      width: 180px; 
+      background: var(--card-bg); 
+      padding: 10px; 
+      border-radius: 12px; 
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255, 190, 51, 0.4); 
+      border-bottom: 6px solid var(--thripudi-gold); 
+    }
+
+    .book-card:hover { 
+      transform: translateY(-8px); 
+      border: 3px solid var(--thripudi-gold); 
+      border-bottom: 8px solid var(--thripudi-gold); 
+      box-shadow: 0 10px 25px rgba(255, 190, 51, 0.3);
+    }
+    
+    /* ഇമേജ് കണ്ടെയ്നർ പരിഷ്കരിച്ചു */
+    .cover-container {
+      background: #001a16;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 250px; /* പോർട്രെയ്റ്റ് കവർ സൈസ് */
+      overflow: hidden;
+    }
+    .book-card img { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover;
+    }
+
+    .book-card h6 { 
+      font-size: 0.9rem; 
+      font-weight: 700;
+      color: var(--thripudi-gold); 
+      margin-top: 10px;
+      overflow: hidden; 
+      text-overflow: ellipsis; 
+      white-space: nowrap; 
+      text-transform: uppercase; 
+    }
+
+    /* സ്റ്റാറ്റിസ്റ്റിക്സ് */
+    .stat-section { padding: 60px 0; background: rgba(0,0,0,0.1); }
+    .stat-card-pro {
+      position: relative; height: 250px; border-radius: 15px; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      margin-bottom: 30px; border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .stat-img-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background-size: cover; background-position: center; z-index: 1;
+      transition: transform 0.8s ease; 
+      filter: brightness(0.4);
+    }
+    .stat-card-pro:hover .stat-img-bg { transform: scale(1.1); filter: brightness(0.5); }
+    .stat-content { position: relative; z-index: 2; text-align: center; }
+    .stat-content i { font-size: 2.5rem; color: var(--thripudi-gold); margin-bottom: 10px; }
+    .stat-content h3 { font-size: 2.2rem; font-weight: bold; }
+
+    .footer_section { 
+      background: #002d26; 
+      padding: 40px 0 20px; 
+      border-top: 2px solid var(--thripudi-gold); 
+      text-align: center; 
+    }
+    .footer-links a { color: #ccc; margin: 0 10px; text-decoration: none; font-size: 0.9rem; }
+    .footer-links a:hover { color: var(--thripudi-gold); }
+
+    @media (max-width: 768px) {
+      .nav-container { flex-direction: column; }
+      .nav-links-group { margin-top: 15px; overflow-x: auto; width: 100%; justify-content: flex-start; }
+      .book-card { width: 155px; }
+      .cover-container { height: 210px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header_section">
+    <div class="container">
+      <div class="nav-container">
+        <a class="thripudi-logo" href="index.html">Thripudi Library®</a>
+        <div class="nav-links-group">
+          <a class="nav-btn active" href="dashboard.html">Dashboard</a>
+          <a class="nav-btn" href="login.html">Login</a>
+          <a class="nav-btn" href="about.html">About</a>
+          <a class="nav-btn" href="mailto:info@thripudi.co.in">Contact</a>
+          <div class="d-flex ml-2">
+            <i class="fa fa-history" style="font-size: 1.2rem; margin-left: 15px; cursor: pointer; color: #fff;"></i>
+            <i class="fa fa-search" style="font-size: 1.2rem; margin-left: 15px; cursor: pointer; color: #fff;"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container-fluid px-0">
+    <section class="py-4">
+      <h4 class="container mb-4" style="border-left: 5px solid var(--thripudi-gold); padding-left: 15px;">പുതിയ പുസ്തകങ്ങൾ</h4>
+      <div class="auto-scroll-wrapper">
+        <div id="scroll-engine" class="scroll-content">
+          </div>
+      </div>
+    </section>
+
+    <section class="container stat-section">
+      <div class="row">
+        <div class="col-6 col-md-3">
+          <div class="stat-card-pro">
+            <div class="stat-img-bg" style="background-image: url('https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=600');"></div>
+            <div class="stat-content">
+              <i class="fa fa-book"></i>
+              <h3>15K+</h3>
+              <p>BOOKS</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card-pro">
+            <div class="stat-img-bg" style="background-image: url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=600');"></div>
+            <div class="stat-content">
+              <i class="fa fa-users"></i>
+              <h3>4.5K</h3>
+              <p>READERS</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card-pro">
+            <div class="stat-img-bg" style="background-image: url('https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=500');"></div>
+            <div class="stat-content">
+              <i class="fa fa-globe"></i>
+              <h3>GLOBAL</h3>
+              <p>ACCESS</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="stat-card-pro">
+            <div class="stat-img-bg" style="background-image: url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600');"></div>
+            <div class="stat-content">
+              <i class="fa fa-certificate"></i>
+              <h3>Totally Free</h3>
+              <p>VERIFIED</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer_section">
+    <div class="container">
+      <div class="footer-links mb-3">
+        <a href="about.html">ഞങ്ങളെക്കുറിച്ച്</a> | 
+        <a href="mailto:info@thripudi.co.in">ബന്ധപ്പെടുക</a> | 
+        <a href="privacy-policy.html">സ്വകാര്യതാ നയം</a> | 
+        <a href="terms.html">നിബന്ധനകൾ</a>
+      </div>
+      <p style="font-size: 0.85em; opacity: 0.7;">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</p>
+    </div>
+  </footer>
+
+  <script>
+    // നന്ദകുമാർ നൽകിയ കൃത്യമായ ഇമേജ് ഐഡികൾ ഇവിടെ ഉപയോഗിക്കുന്നു
+    const libraryData = [
+      { name: "Agatha Christie Books", id: "13J_Ml41jY9G_Iy6lZOeRFjMnd8HlIXmY" },
+      { name: "Plato Books", id: "1BWOvtAKQPoyRUMqLcvP14sVYM8aMo_mK" },
+      { name: "Aristotle Books", id: "1DphPFMDXE5Ostg6dk4hOHzReltngA8He" },
+{ name: "changampuzha", id: "1ZL6lLoGou1WWzuM_T4dIeC4Vk3b5xugi" },
+{ name: "ulloor", id: "1aQfKxBj89D6MRyy-dd5nWJAyi3OHGAhZ" },
+{ name: "thikkodiyan", id: "1WqchqLpiqN0DxYTv1wUyOkwXKupboquI" },
+      { name: "Arthur Conan Doyle Books", id: "1QH14rIMhaGsCY8nsGz8LtQydH7CndeAw" },
+      { name: "Edgar Allan Poe Books", id: "1n-qlBnMYtVpRRqepmziIM9JFTWopR2ML" },
+      { name: "Bagavada", id: "1VywuK_Z1ybQW3voEc3F6mQ7O8cGw7GvR" },
+{ name: "kumaranassan", id: "1eTxMxFwq8aV4GBntEekeKbprSU_UXSd9" },
+{ name: "rigvedam", id: "1FbCd9aAYP2BmmDJcSePGWbDdlw5Y6RVL" },
+{ name: "Data Analysis", id: "1nboCklxhOzsALdALxt7taXukNgl6R3tM" },
+{ name: "Quantum Computing", id: "19fRq9daUAQlHqDDKC9M0G7iej3IgxcAN" },
+{ name: "Software Engineering", id: "1QK3Ya0OfsX9yFuTavHcUp4wglnxGe2D9" },
+{ name: "Microsoft Excel", id: "13-qcDfGmy0i18kHAXw51uTDgGls_cu6c" },
+      { name: "Artificial Intelligence", id: "1SuzLAeZWBICkvSgHxgiiGlqSbf_Eyx_K" },
+{ name: "Intrigue Novels", id: "1orhMJqTZaFQDuXB8dpeaXbb-R3ZIw5bg" },
+{ name: "Suspense Novels", id: "1QdKWYP6uTI5KovHxbUfblrsg7vajtr8R" },
+{ name: "Police Novels", id: "1LoV62EH-iBc0XEoq8R12X9htiyCCtmG3" },
+{ name: "Mistery Novels", id: "10kUe4wMoF_EsFF3Hug1pMg1i-jOsip5c" },
+      { name: "Vampire Novels", id: "1gJkAVKBOQf776lOm5OPAtZz-_ZcXhRn6" },
+      { name: "vallathol", id: "1TMc3PyL-cJFjUhn-8Rsi1T5FMsl37Vk5" }   
+
+    ];
+
+    function initAutoScroll() {
+      const engine = document.getElementById('scroll-engine');
+      if (!engine) return;
+
+      // റാൻഡം ഓർഡറിൽ കാണിക്കാൻ ഷഫിൾ ചെയ്യുന്നു
+      const shuffled = [...libraryData].sort(() => 0.5 - Math.random());
+      // സ്മൂത്ത് സ്ക്രോളിംഗിനായി ലിസ്റ്റ് ആവർത്തിക്കുന്നു
+      const fullList = [...shuffled, ...shuffled, ...shuffled];
+      
+      const logoPlaceholder = "https://drive.google.com/thumbnail?id=1DuMrsRg-QsW9mf5lV4uK8eWn8oiofz5r&sz=w300"; 
+
+      engine.innerHTML = fullList.map((item) => {
+        // ഡ്രൈവ് ഐഡി ഉപയോഗിച്ച് കവർ ചിത്രം ലോഡ് ചെയ്യുന്നു
+        const thumbUrl = `https://drive.google.com/thumbnail?id=${item.id}&sz=w600`;
+        // ഫയൽ ലിങ്ക് പാത്ത് (ഉദാ: Plato Books -> plato_books.html)
+        const fileLink = item.name.toLowerCase().replace(/\s+/g, '_') + ".html";
+
+        return `
+          <a href="${fileLink}" style="text-decoration: none;">
+            <div class="book-card">
+              <div class="cover-container">
+                <img src="${thumbUrl}" 
+                     onerror="this.src='${logoPlaceholder}';" 
+                     alt="${item.name}">
+              </div>
+              <h6>${item.name}</h6>
+            </div>
+          </a>
+        `;
+      }).join('');
+    }
+    
+    window.onload = initAutoScroll;
+  </script>
+</body>
+</html>

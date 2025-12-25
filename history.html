@@ -15,6 +15,15 @@
         .history-card:hover { transform: translateY(-5px); }
         .del-history-btn { position: absolute; top: 8px; right: 8px; background: rgba(220, 53, 69, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 5; }
         .view-date { font-size: 0.7em; color: #666; margin-top: 5px; }
+        
+        /* Profile Dropdown Fix */
+        .user-avatar-wrap { display: flex; align-items: center; gap: 10px; cursor: pointer; color: white; }
+        .profile-dropdown { 
+            display: none; position: absolute; top: 110%; right: 0; 
+            background: white; min-width: 190px; box-shadow: 0 8px 16px rgba(0,0,0,0.2); 
+            border-radius: 5px; z-index: 2001; 
+        }
+        .profile-dropdown a { display: block; padding: 12px 15px; color: #333; text-decoration: none; font-size: 0.85em; border-bottom: 1px solid #eee; text-align: left; }
     </style>
 </head>
 <body>
@@ -29,13 +38,16 @@
             <a class="nav-item" href="dashboard.html">Home</a>
             <a class="nav-item" href="collection.html">ശേഖരം</a>
             <a class="nav-item" href="about.html">About</a>
+            <a class="nav-item" href="contact.html">Contact</a>
             <div class="user-profile" id="user-profile-btn">
-                <img id="user-avatar-img" class="user-avatar-small">
-                <span><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                <div class="user-avatar-wrap">
+                    <img id="user-avatar-img" class="user-avatar-small">
+                    <span style="font-size: 0.85em;">സ്വാഗതം, <span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                </div>
                 <div class="profile-dropdown" id="profile-dropdown">
-                    <a href="settings.html">Settings</a>
-                    <a href="history.html">History</a>
-                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;">Logout</a>
+                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
+                    <a href="history.html"><i class="fas fa-history"></i> History</a>
+                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
@@ -53,7 +65,7 @@
 </section>
 
 <div id="deleteConfirmModal" class="video-popup-overlay">
-    <div class="popup-box" style="padding: 20px; border-radius: 12px; background: white; width: 300px;">
+    <div class="popup-box" style="padding: 20px; border-radius: 12px; background: white; width: 300px; text-align: center;">
         <h4 style="color: var(--secondary-dark); margin-top: 0;">നീക്കം ചെയ്യണോ?</h4>
         <p style="font-size: 0.9em;">ഈ പുസ്തകം ചരിത്രത്തിൽ നിന്നും നീക്കം ചെയ്യണോ?</p>
         <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
@@ -77,26 +89,44 @@
     </div>
 </footer>
 
-<script src="assets/scripts.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
     const firebaseConfig = { apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", authDomain: "thripudilibrary.firebaseapp.com", projectId: "thripudilibrary", storageBucket: "thripudilibrary.firebasestorage.app", messagingSenderId: "887018912750", appId: "1:887018912750:web:cc05190a72b13db816acff" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    const userAvatarImg = document.getElementById('user-avatar-img');
+    const dName = document.getElementById('display-name');
+    const defaultUserImg = 'assets/cover/default_user.jpg';
     let currentUid = null;
     let pendingDeleteIndex = null;
 
     onAuthStateChanged(auth, (user) => {
         if (user) {
             currentUid = user.uid;
+            dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
+            userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
             loadHistory(user.uid);
         } else {
             window.location.href = "login.html";
         }
     });
+
+    // Dropdown Logic
+    const profileBtn = document.getElementById('user-profile-btn');
+    const dropdown = document.getElementById('profile-dropdown');
+    profileBtn.onclick = (e) => {
+        e.stopPropagation();
+        dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    };
+    window.onclick = () => dropdown.style.display = 'none';
+
+    // Logout Function
+    window.logoutUser = () => {
+        signOut(auth).then(() => { window.location.href = "logout_success.html"; });
+    };
 
     function loadHistory(uid) {
         const history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
@@ -105,9 +135,9 @@
             container.innerHTML = '<p style="grid-column:1/-1; padding: 100px 0; opacity: 0.6;">ചരിത്രം ലഭ്യമല്ല.</p>';
             return;
         }
-        container.innerHTML = history.reverse().map((item, index) => `
+        container.innerHTML = history.slice().reverse().map((item, index) => `
             <div class="book-card history-card">
-                <button class="del-history-btn" onclick="openDelPopup(${index})"><i class="fas fa-trash"></i></button>
+                <button class="del-history-btn" onclick="event.stopPropagation(); openDelPopup(${history.length - 1 - index})"><i class="fas fa-trash"></i></button>
                 <div class="image-wrapper">
                     <img src="${item.thumb}" class="book-cover">
                 </div>
@@ -129,9 +159,8 @@
     document.getElementById('confirmDelBtn').onclick = function() {
         if(currentUid !== null && pendingDeleteIndex !== null) {
             let history = JSON.parse(localStorage.getItem('thripudi_history_' + currentUid)) || [];
-            // reverse ചെയ്തതിനാൽ ഇൻഡക്സ് മാറാൻ സാധ്യതയുള്ളത് കൊണ്ട് ശരിയായ ഐറ്റം കളയുന്നു
-            history.reverse().splice(pendingDeleteIndex, 1);
-            localStorage.setItem('thripudi_history_' + currentUid, JSON.stringify(history.reverse()));
+            history.splice(pendingDeleteIndex, 1);
+            localStorage.setItem('thripudi_history_' + currentUid, JSON.stringify(history));
             closeDelPopup();
             loadHistory(currentUid);
         }

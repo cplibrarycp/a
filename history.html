@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>വായന ചരിത്രം | THRIPUDI LIBRARY</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+    
+    <style>
+        :root { 
+            --primary-teal: #00897B; --secondary-dark: #004D40; --background-light: #E0F2F1;
+            --text-color: #263238; --light-text: #FFFFFF; --card-bg: #FFFFFF; --outline-color: #B2DFDB;
+        }
+
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; padding: 0; overflow-x: hidden; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-light); color: var(--text-color); display: flex; flex-direction: column; min-height: 100vh; }
+        .container { width: 92%; margin: 0 auto; max-width: 1200px; }
+        a { text-decoration: none; transition: 0.3s; }
+
+        /* --- ത്രിപുടി മാസ്റ്റർ ഹെഡർ --- */
+        header { background-color: var(--secondary-dark); padding: 5px 0; min-height: 90px; position: sticky; top: 0; z-index: 1000; display: flex; align-items: center; box-shadow: 0 4px 8px rgba(0,0,0,0.2); width: 100%; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; width: 100%; flex-wrap: wrap; }
+        .logo-container { display: flex; align-items: center; gap: 12px; color: #FFFFFF !important; }
+        .logo-img { height: 65px; width: auto; } 
+        .logo-text { font-size: 1.6em; font-weight: 700; letter-spacing: 1px; }
+
+        .nav-links { display: flex; align-items: center; gap: 8px; }
+        .nav-item { 
+            color: #FFFFFF !important; font-weight: 600; font-size: 0.82em; text-transform: uppercase; padding: 8px 14px; 
+            border: 1.5px solid rgba(255, 255, 255, 0.3); border-radius: 4px; display: flex; align-items: center; gap: 6px;
+            background-color: var(--secondary-dark) !important;
+        }
+        .nav-item:hover { background-color: #FFFFFF !important; color: var(--secondary-dark) !important; border-color: #FFFFFF; }
+
+        .user-profile { display: flex; align-items: center; margin-left: 10px; padding-left: 10px; border-left: 1px solid rgba(255,255,255,0.2); position: relative; cursor: pointer; color: #FFFFFF; }
+        .user-avatar { width: 38px; height: 38px; background-color: #fff; color: var(--primary-teal); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; overflow: hidden; border: 2px solid rgba(255,255,255,0.5); flex-shrink: 0; }
+        .user-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .welcome-msg { font-size: 0.85em; font-weight: 500; white-space: nowrap; }
+        
+        .profile-dropdown { display: none; position: absolute; top: 100%; right: 0; background-color: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 5px; min-width: 190px; margin-top: 20px; z-index: 1001; }
+        .profile-dropdown a { display: block; padding: 12px 15px; color: var(--text-color); border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 10px; font-weight: 600; font-size: 0.9em; }
+        .profile-dropdown a:hover { background-color: #f5f5f5; color: var(--primary-teal); }
+
+        @media (max-width: 768px) {
+            header { height: auto; padding: 12px 0; min-height: 120px !important; position: relative !important; display: block !important; }
+            .navbar { flex-direction: column; gap: 12px; display: flex !important; align-items: center !important; }
+            .logo-container { gap: 8px; width: 100%; justify-content: center !important; margin-bottom: 10px; }
+            .logo-img { height: 45px; } 
+            .logo-text { font-size: 1.4em !important; white-space: nowrap; display: block; }
+            .nav-links { width: 100%; justify-content: center !important; flex-wrap: wrap; gap: 5px; display: flex !important; }
+            .nav-item { padding: 6px 10px; font-size: 0.75em !important; border: 1px solid rgba(255, 255, 255, 0.2); }
+            .welcome-msg { display: none; }
+            .user-profile { border-left: none; margin-top: 5px; }
+        }
+
+        /* --- ഹിസ്റ്ററി കണ്ടെന്റ് --- */
+        .history-section { padding: 40px 0; flex: 1; text-align: center; }
+        .back-nav { text-align: left; margin-bottom: 20px; }
+        .back-link { color: var(--secondary-dark); font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+
+        .history-grid { display: grid; gap: 25px; margin-top: 20px; grid-template-columns: repeat(2, 1fr); }
+        @media (min-width: 1024px) { .history-grid { grid-template-columns: repeat(5, 1fr) !important; } }
+
+        .history-card { background: white; border-radius: 10px; overflow: hidden; position: relative; border: 3px solid var(--outline-color); transition: transform 0.2s; }
+        .history-card:hover { transform: translateY(-5px); }
+        .img-box { height: 260px; width: 100%; background: #f0f0f0; }
+        .img-box img { width: 100%; height: 100%; object-fit: contain; }
+        .info-box { padding: 12px; }
+        .book-title { font-weight: 700; color: var(--secondary-dark); font-size: 0.9em; height: 2.6em; overflow: hidden; margin-bottom: 5px; }
+        .view-date { font-size: 0.75em; color: #666; }
+
+        .del-history-btn { position: absolute; top: 8px; right: 8px; background: rgba(220, 53, 69, 0.9); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; z-index: 5; }
+
+        /* --- പോപ്പപ്പ് സ്റ്റൈൽ --- */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .popup-box { background: white; width: 90%; max-width: 400px; border-radius: 12px; overflow: hidden; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .popup-header { background: var(--secondary-dark); color: white; padding: 15px; font-weight: 700; }
+        .popup-body { padding: 25px; color: var(--text-color); font-size: 0.95em; }
+        .popup-footer { padding: 15px; display: flex; gap: 10px; justify-content: center; background: #f9f9f9; }
+        .btn-action { background: var(--primary-teal); color: white; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; }
+        .btn-cancel { background: #e0e0e0; color: #555; border: none; padding: 10px 20px; border-radius: 5px; font-weight: 600; cursor: pointer; }
+
+        footer { background-color: var(--secondary-dark); color: white; text-align: center; padding: 25px 0; margin-top: auto; width: 100%; }
+        .footer-content { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+        .footer-row { display: flex; align-items: center; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .social-links-compact a { color: white; opacity: 0.8; font-size: 1.3em; margin: 0 10px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container navbar">
+        <a href="dashboard.html" class="logo-container">
+            <img src="https://drive.google.com/thumbnail?sz=w600&id=1DuMrsRg-QsW9mf5lV4uK8eWn8oiofz5r" alt="Logo" class="logo-img">
+            <span class="logo-text">THRIPUDI LIBRARY</span>
+        </a>
+        <div class="nav-links">
+            <a class="nav-item" href="dashboard.html"><i class="fas fa-home"></i> <span>Home</span></a>
+            <a class="nav-item" href="collection.html"><i class="fas fa-book"></i> <span>ശേഖരം</span></a>
+            <a class="nav-item" href="about.html"><i class="fas fa-info-circle"></i> <span>About</span></a>
+            <a class="nav-item" href="contact.html"><i class="fas fa-envelope"></i> <span>Contact</span></a>
+            <div class="user-profile" id="profile-section">
+                <div class="user-avatar" id="userAvatar"><i class="fas fa-user"></i></div>
+                <div class="welcome-msg">സ്വാഗതം, <span id="display-name">...</span></div>
+                <div class="profile-dropdown" id="userDropdown">
+                    <a href="profile.html"><i class="fas fa-user-cog"></i> Profile Settings</a>
+                    <a href="history.html"><i class="fas fa-history"></i> Reading History</a>
+                    <a href="#" id="logout-link" style="color:red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="history-section">
+    <div class="container">
+        <div class="back-nav">
+            <a href="collection.html" class="back-link"><i class="fas fa-chevron-left"></i> ശേഖരത്തിലേക്ക് തിരികെ</a>
+        </div>
+        <h1>വായന ചരിത്രം</h1>
+        <div id="history-container" class="history-grid"></div>
+    </div>
+</section>
+
+<div id="deleteConfirmModal" class="modal-overlay">
+    <div class="popup-box">
+        <div class="popup-header">ത്രിപുടി ലൈബ്രറി</div>
+        <div class="popup-body">ഈ പുസ്തകം ചരിത്രത്തിൽ നിന്നും നീക്കം ചെയ്യണോ?</div>
+        <div class="popup-footer">
+            <button id="confirmDelBtn" class="btn-action">അതെ</button>
+            <button onclick="closeDelPopup()" class="btn-cancel">വേണ്ട</button>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="container footer-content">
+        <div class="footer-row">
+            <div class="social-links-compact">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+            </div>
+            <div style="font-size: 0.85em; opacity: 0.8;">
+                <a href="privacy-policy.html" style="color:white;">സ്വകാര്യതാ നയം</a> | <a href="terms.html" style="color:white;">ഉപയോഗ നിബന്ധനകൾ</a>
+            </div>
+        </div>
+        <p style="font-size: 0.85em; opacity: 0.6; margin-top:10px;">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</p>
+    </div>
+</footer>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+
+    const firebaseConfig = { apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", authDomain: "thripudilibrary.firebaseapp.com", projectId: "thripudilibrary", storageBucket: "thripudilibrary.firebasestorage.app", messagingSenderId: "887018912750", appId: "1:887018912750:web:cc05190a72b13db816acff" };
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    let currentUid = null;
+    let pendingDeleteIndex = null;
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUid = user.uid;
+            document.getElementById('display-name').textContent = user.displayName ? user.displayName.split(' ')[0] : "User";
+            if(user.photoURL) document.getElementById('userAvatar').innerHTML = `<img src="${user.photoURL}">`;
+            loadHistory(user.uid);
+        } else {
+            window.location.href = "login.html";
+        }
+    });
+
+    function loadHistory(uid) {
+        const history = JSON.parse(localStorage.getItem('history_' + uid)) || [];
+        const container = document.getElementById('history-container');
+        if (history.length === 0) {
+            container.innerHTML = '<p style="grid-column:1/-1; padding: 100px 0; opacity: 0.6;">ചരിത്രം ലഭ്യമല്ല.</p>';
+            return;
+        }
+        container.innerHTML = history.map((item, index) => `
+            <div class="history-card">
+                <button class="del-history-btn" onclick="openDelPopup(${index})"><i class="fas fa-trash"></i></button>
+                <a href="${item.link}">
+                    <div class="img-box"><img src="${item.image}" alt="Cover"></div>
+                    <div class="info-box">
+                        <div class="book-title">${item.title}</div>
+                        <div class="view-date">അവസാനം കണ്ടത്: ${new Date().toLocaleDateString('ml-IN')}</div>
+                    </div>
+                </a>
+            </div>
+        `).join('');
+    }
+
+    window.openDelPopup = function(index) {
+        pendingDeleteIndex = index;
+        document.getElementById('deleteConfirmModal').style.display = 'flex';
+    };
+
+    window.closeDelPopup = function() {
+        document.getElementById('deleteConfirmModal').style.display = 'none';
+    };
+
+    document.getElementById('confirmDelBtn').onclick = function() {
+        if(currentUid !== null && pendingDeleteIndex !== null) {
+            let history = JSON.parse(localStorage.getItem('history_' + currentUid)) || [];
+            history.splice(pendingDeleteIndex, 1);
+            localStorage.setItem('history_' + currentUid, JSON.stringify(history));
+            closeDelPopup();
+            loadHistory(currentUid);
+        }
+    };
+
+    // Profile Dropdown Toggle Logic
+    document.getElementById('profile-section').onclick = function(e) {
+        e.stopPropagation();
+        let d = document.getElementById('userDropdown');
+        d.style.display = d.style.display === "block" ? "none" : "block";
+    };
+    window.onclick = () => document.getElementById('userDropdown').style.display = 'none';
+    
+    // Logout Success Redirect
+    document.getElementById('logout-link').onclick = (e) => {
+        e.preventDefault();
+        signOut(auth).then(() => {
+            window.location.href = "logout-success.html";
+        });
+    };
+</script>
+</body>
+</html>

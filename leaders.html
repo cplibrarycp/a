@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaders Eat Last - Simon Sinek | THRIPUDI LIBRARY</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</head>
+<body>
+<header>
+    <div class="container navbar">
+        <a href="dashboard.html" class="logo-container">
+            <span class="logo-text">THRIPUDI LIBRARY</span>
+            <img src="assets/cover/logo.png" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a class="nav-item" href="dashboard.html">Home</a>
+            <a class="nav-item" href="collection.html">ശേഖരം</a>
+            <a class="nav-item" href="about.html">About</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+            <div class="user-profile" id="user-profile-btn">
+                <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
+                <span><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="settings.html">Settings</a>
+                    <a href="history.html">History</a>
+                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="collection-section">
+    <div class="container">
+        <h1 style="color:#004D40; text-align:center; margin-bottom:30px;">Leaders Eat Last - Simon Sinek</h1>
+        <div class="library-container">
+            
+      <div class="book-card" id="card-1OOFS2fz1WOtHBytjlMzVNUZ-JkFgrZ1h">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/73.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1OOFS2fz1WOtHBytjlMzVNUZ-JkFgrZ1h', 'audio', 'card-1OOFS2fz1WOtHBytjlMzVNUZ-JkFgrZ1h')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1OOFS2fz1WOtHBytjlMzVNUZ-JkFgrZ1h"></div>
+        </div>
+        <div class="book-title">Thank_You_for_Being_Late_An_Optimist_s (17)</div>
+      </div>
+
+      <div class="book-card" id="card-1m_vnjRcqpdcqM3Ip07A-3p5Lsyq7XU2C">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/78.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1m_vnjRcqpdcqM3Ip07A-3p5Lsyq7XU2C', 'audio', 'card-1m_vnjRcqpdcqM3Ip07A-3p5Lsyq7XU2C')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1m_vnjRcqpdcqM3Ip07A-3p5Lsyq7XU2C"></div>
+        </div>
+        <div class="book-title">06 Destructive Abundance</div>
+      </div>
+
+      <div class="book-card" id="card-1lPJOvtzNfb5Qm3w_42gn-959fmLmEB9K">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/40.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1lPJOvtzNfb5Qm3w_42gn-959fmLmEB9K', 'audio', 'card-1lPJOvtzNfb5Qm3w_42gn-959fmLmEB9K')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1lPJOvtzNfb5Qm3w_42gn-959fmLmEB9K"></div>
+        </div>
+        <div class="book-title">02 Powerful Forces</div>
+      </div>
+
+      <div class="book-card" id="card-1kwn0cRcc86UCCCBLP-vqiaebX_amHhCp">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/99.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1kwn0cRcc86UCCCBLP-vqiaebX_amHhCp', 'audio', 'card-1kwn0cRcc86UCCCBLP-vqiaebX_amHhCp')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1kwn0cRcc86UCCCBLP-vqiaebX_amHhCp"></div>
+        </div>
+        <div class="book-title">01 Our Need to Feel Safe</div>
+      </div>
+
+      <div class="book-card" id="card-14VsP3EvrwoX8xN5QhpDrJ7n8Wcs1TQ69">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/78.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('14VsP3EvrwoX8xN5QhpDrJ7n8Wcs1TQ69', 'audio', 'card-14VsP3EvrwoX8xN5QhpDrJ7n8Wcs1TQ69')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-14VsP3EvrwoX8xN5QhpDrJ7n8Wcs1TQ69"></div>
+        </div>
+        <div class="book-title">05 The Abstract Challenge</div>
+      </div>
+
+      <div class="book-card" id="card-1j2bPj640V3Sqqqg3NBTvTmTG_bEyW7rw">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/48.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1j2bPj640V3Sqqqg3NBTvTmTG_bEyW7rw', 'audio', 'card-1j2bPj640V3Sqqqg3NBTvTmTG_bEyW7rw')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1j2bPj640V3Sqqqg3NBTvTmTG_bEyW7rw"></div>
+        </div>
+        <div class="book-title">07 A Society of Addicts</div>
+      </div>
+
+      <div class="book-card" id="card-1tAPY1A44Bp2-r4zpyVh-XTUaotgkoOOT">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/83.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1tAPY1A44Bp2-r4zpyVh-XTUaotgkoOOT', 'audio', 'card-1tAPY1A44Bp2-r4zpyVh-XTUaotgkoOOT')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1tAPY1A44Bp2-r4zpyVh-XTUaotgkoOOT"></div>
+        </div>
+        <div class="book-title">08 Becoming a Leader</div>
+      </div>
+
+      <div class="book-card" id="card-1IHFxtjTmfVsm-sfYdXbBxVYFtUbsQ6yD">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/92.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1IHFxtjTmfVsm-sfYdXbBxVYFtUbsQ6yD', 'audio', 'card-1IHFxtjTmfVsm-sfYdXbBxVYFtUbsQ6yD')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1IHFxtjTmfVsm-sfYdXbBxVYFtUbsQ6yD"></div>
+        </div>
+        <div class="book-title">04 How We Got Here</div>
+      </div>
+
+      <div class="book-card" id="card-15JVWHGOBdiQOSg6_6cj4rtTboYAVKnez">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/96.JPG" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('15JVWHGOBdiQOSg6_6cj4rtTboYAVKnez', 'audio', 'card-15JVWHGOBdiQOSg6_6cj4rtTboYAVKnez')">കേൾക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-15JVWHGOBdiQOSg6_6cj4rtTboYAVKnez"></div>
+        </div>
+        <div class="book-title">03 Reality</div>
+      </div>
+        </div>
+    </div>
+</section>
+
+<div id="loginAlertModal"><div class="popup-box"><img src="assets/cover/logo.png" style="height:45px; margin-bottom:10px;"><h3 style="color:#004D40; margin:5px 0;">ത്രിപുടി ലൈബ്രറി</h3><p id="loginMsg" style="font-weight:600;"></p><br><div style="display:flex; justify-content:center; gap:15px;"><a href="login.html" id="login-btn-link" style="padding:10px 25px; background:#00897B; color:white; text-decoration:none; border-radius:5px; font-weight:600;">ലോഗിൻ ചെയ്യൂ</a><button onclick="closeLoginPopup()" style="padding:10px 25px; border:none; background:#eee; border-radius:5px; cursor:pointer; color:#555;">ഇപ്പോൾ വേണ്ട</button></div></div></div>
+<div id="videoOverlay" class="video-popup-overlay"><div class="video-window"><button class="close-video-btn" onclick="closeVideo()"><i class="fas fa-arrow-left"></i></button><div id="videoFrameContainer" style="width:100%; height:100%; position:relative;"></div></div></div>
+<div id="pdfModal"><div id="modalHeader"><span>ത്രിപുടി ലൈബ്രറി - വായനമുറി</span><button onclick="closePdfModal()" style="color:white; background:none; border:none; cursor:pointer; font-size:1.5em;"><i class="fas fa-times"></i></button></div><div class="iframe-container"><div class="player-mask" style="width:60px; height:60px;"></div><iframe id="pdfFrame" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe></div></div>
+
+<footer>
+    <div class="container footer-content">
+        <div class="footer-line-one">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/919447333333" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <span class="footer-divider">|</span>
+            <a href="privacy.html">സ്വകാര്യതാ നയം</a>
+            <span class="footer-divider">|</span>
+            <a href="terms.html">നിബന്ധനകൾ</a>
+        </div>
+        <div class="footer-line-two">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</div>
+    </div>
+</footer>
+
+<script src="assets/scripts.js"></script>
+</body>
+</html>

@@ -1,15 +1,22 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>മലയാളം അക്ഷരമാലാക്രമത്തിൽ | THRIPUDI LIBRARY</title>
+    <title>English Collections | THRIPUDI LIBRARY</title>
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet"/>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="assets/styles.css">
+    
     <style>
         .collection-section { padding: 30px 0; flex: 1; }
         
+        /* പേജ് ഹെഡിംഗ് */
+        .page-header { text-align: center; margin-bottom: 30px; }
+        .page-header h1 { color: var(--secondary-dark); font-size: 2.2em; margin-bottom: 5px; }
+        .page-header p { font-size: 0.95em; opacity: 0.8; color: var(--text-color); }
+
         /* സെർച്ച് ബാർ */
         .search-container { margin-bottom: 35px; position: relative; max-width: 600px; margin-left: auto; margin-right: auto; }
         #searchBar { 
@@ -20,7 +27,7 @@
         #searchBar:focus { border-color: var(--primary-teal); box-shadow: 0 0 10px rgba(0,137,123,0.1); }
         .search-icon { position: absolute; left: 18px; top: 50%; transform: translateY(-50%); color: var(--primary-teal); opacity: 0.7; }
 
-        /* ഗ്രിഡ് & ആനിമേഷൻ */
+        /* ത്രിപുടി 5-ബുക്ക് ഗ്രീഡ് */
         .dashboard-grid { 
             display: grid; gap: 20px; 
             grid-template-columns: repeat(5, 1fr); 
@@ -61,8 +68,6 @@
 
         @media (max-width: 768px) {
             .dashboard-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 15px; }
-            .category-card { padding: 20px 10px; }
-            .icon-circle { width: 55px; height: 55px; font-size: 1.3em; }
         }
     </style>
 </head>
@@ -83,7 +88,7 @@
             <div class="user-profile" id="user-profile-btn">
                 <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
-                    <span style="color: white; font-size: 0.85em;"><span id="display-name">അതിഥി</span> <i class="fas fa-caret-down"></i></span>
+                    <span style="color: white; font-size: 0.85em;"><span id="display-name">Guest</span> <i class="fas fa-caret-down"></i></span>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
                     <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
@@ -97,32 +102,27 @@
 
 <section class="collection-section">
     <div class="container">
-        <h2 style="color: var(--secondary-dark); margin-bottom: 25px; text-align: center;">മലയാളം - അക്ഷരമാലാക്രമത്തിൽ</h2>
-        
+        <div class="page-header">
+            <h1>English Collections</h1>
+            <p>Explore our vast collection of English literature and resources</p>
+        </div>
+
         <div class="search-container">
             <i class="fas fa-search search-icon"></i>
-            <input id="searchBar" onkeyup="searchCategories()" placeholder="അക്ഷരം തിരയുക..." type="text"/>
+            <input id="searchBar" onkeyup="searchCategories()" placeholder="Search categories..." type="text"/>
         </div>
 
         <div class="dashboard-grid" id="categoryList">
-            <a class="category-card" href="malayalamcollection1.html"><div class="icon-circle"><i class="fas fa-feather-alt"></i></div><span class="category-label">അക്ഷരം സ/ശ</span></a>
-            <a class="category-card" href="malayalamcollection2.html"><div class="icon-circle"><i class="fas fa-pen-nib"></i></div><span class="category-label">അക്ഷരം അ</span></a>
-            <a class="category-card" href="malayalamcollection3.html"><div class="icon-circle"><i class="fas fa-scroll"></i></div><span class="category-label">അക്ഷരം ഭ/ബ</span></a>
-            <a class="category-card" href="malayalamcollection4.html"><div class="icon-circle"><i class="fas fa-book-reader"></i></div><span class="category-label">അക്ഷരം ച</span></a>
-            <a class="category-card" href="malayalamcollection5.html"><div class="icon-circle"><i class="fas fa-om"></i></div><span class="category-label">അക്ഷരം ദ</span></a>
-            <a class="category-card" href="malayalamcollection6.html"><div class="icon-circle"><i class="fas fa-dharmachakra"></i></div><span class="category-label">അക്ഷരം ഫ</span></a>
-            <a class="category-card" href="malayalamcollection7.html"><div class="icon-circle"><i class="fas fa-book"></i></div><span class="category-label">അക്ഷരം ക</span></a>
-            <a class="category-card" href="malayalamcollection8.html"><div class="icon-circle"><i class="fas fa-university"></i></div><span class="category-label">അക്ഷരം ഗ</span></a>
-            <a class="category-card" href="malayalamcollection9.html"><div class="icon-circle"><i class="fas fa-user-edit"></i></div><span class="category-label">അക്ഷരം ജ</span></a>
-            <a class="category-card" href="malayalamcollection10.html"><div class="icon-circle"><i class="fas fa-user-circle"></i></div><span class="category-label">അക്ഷരം ന</span></a>
-            <a class="category-card" href="malayalamcollection11.html"><div class="icon-circle"><i class="fas fa-book"></i></div><span class="category-label">അക്ഷരം മ</span></a>
-            <a class="category-card" href="malayalamcollection12.html"><div class="icon-circle"><i class="fas fa-university"></i></div><span class="category-label">അക്ഷരം ഹ</span></a>
-            <a class="category-card" href="malayalamcollection13.html"><div class="icon-circle"><i class="fas fa-user-edit"></i></div><span class="category-label">അക്ഷരം ത</span></a>
-            <a class="category-card" href="malayalamcollection14.html"><div class="icon-circle"><i class="fas fa-user-circle"></i></div><span class="category-label">അക്ഷരം പ</span></a>
-            <a class="category-card" href="malayalamcollection15.html"><div class="icon-circle"><i class="fas fa-book"></i></div><span class="category-label">അക്ഷരം ര</span></a>
-            <a class="category-card" href="malayalamcollection16.html"><div class="icon-circle"><i class="fas fa-university"></i></div><span class="category-label">അക്ഷരം വ</span></a>
-            <a class="category-card" href="malayala.html"><div class="icon-circle"><i class="fas fa-folder-plus"></i></div><span class="category-label">മറ്റുള്ളവ</span></a>
-            <a class="category-card" href="language.html" style="background: #f5f5f5;"><div class="icon-circle"><i class="fas fa-arrow-left"></i></div><span class="category-label">പുറകിലേക്ക്</span></a>
+            <a class="category-card" href="english.html"><div class="icon-circle"><i class="fas fa-box-open"></i></div><span class="category-label">Classics</span></a>
+            <a class="category-card" href="fiction.html"><div class="icon-circle"><i class="fas fa-hat-wizard"></i></div><span class="category-label">Fiction</span></a>
+            <a class="category-card" href="nonfiction.html"><div class="icon-circle"><i class="fas fa-globe"></i></div><span class="category-label">Non-Fiction</span></a>
+            <a class="category-card" href="section1.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 1</span></a>
+            <a class="category-card" href="section2.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 2</span></a>
+            <a class="category-card" href="section3.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 3</span></a>
+            <a class="category-card" href="section4.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 4</span></a>
+            <a class="category-card" href="section5.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 5</span></a>
+            <a class="category-card" href="section6.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 6</span></a>
+            <a class="category-card" href="section7.html"><div class="icon-circle"><i class="fas fa-folder"></i></div><span class="category-label">Section 7</span></a>
         </div>
     </div>
 </section>
@@ -151,7 +151,7 @@
     const firebaseConfig = { 
         apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", 
         authDomain: "thripudilibrary.firebaseapp.com", 
-        projectId: "thripudilibrary" 
+        projectId: "thripudilibrary"
     };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
@@ -163,13 +163,15 @@
             dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "User";
             userAvatarImg.src = user.photoURL || 'assets/cover/default_user.jpg';
         } else {
-            dName.innerText = "അതിഥി";
+            dName.innerText = "Guest";
             userAvatarImg.src = 'assets/cover/default_user.jpg';
         }
     });
 
     document.getElementById('logout-trigger').onclick = () => {
-        signOut(auth).then(() => { window.location.href = "logout-success.html"; });
+        signOut(auth).then(() => {
+            window.location.href = "logout-success.html";
+        }).catch((e) => console.error("Logout Error", e));
     };
 
     const profileBtn = document.getElementById('user-profile-btn');

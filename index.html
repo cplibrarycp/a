@@ -24,12 +24,13 @@
       overflow-x: hidden; 
     }
     
-    .thripudi-logo { font-size: 2.2rem; font-weight: bold; color: var(--thripudi-gold); text-decoration: none; }
+    .logo-img-main { height: 75px; width: auto; margin-right: 15px; } /* ലോഗോ സ്റ്റൈൽ */
+    .thripudi-logo { display: flex; align-items: center; font-size: 2.2rem; font-weight: bold; color: var(--thripudi-gold); text-decoration: none; }
 
     /* ഹെഡർ */
     .header_section { 
       background: #002d26; 
-      padding: 15px 0; 
+      padding: 10px 0; 
       border-bottom: 2px solid var(--thripudi-gold); 
     }
     .nav-container { 
@@ -77,7 +78,7 @@
       100% { transform: translate3d(-50%, 0, 0); }
     }
 
-    /* പുസ്തക കാർഡ് - മൗസ് വെക്കുമ്പോൾ കട്ടി കൂടുന്ന ബോർഡർ */
+    /* പുസ്തക കാർഡ് */
     .book-card {
       width: 180px; 
       background: var(--card-bg); 
@@ -96,7 +97,6 @@
       box-shadow: 0 10px 25px rgba(255, 190, 51, 0.3);
     }
     
-    /* ഇമേജ് കണ്ടെയ്നർ പരിഷ്കരിച്ചു */
     .cover-container {
       background: #001a16;
       border-radius: 8px;
@@ -104,7 +104,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 250px; /* പോർട്രെയ്റ്റ് കവർ സൈസ് */
+      height: 250px;
       overflow: hidden;
     }
     .book-card img { 
@@ -156,6 +156,7 @@
       .nav-links-group { margin-top: 15px; overflow-x: auto; width: 100%; justify-content: flex-start; }
       .book-card { width: 155px; }
       .cover-container { height: 210px; }
+      .logo-img-main { height: 50px; }
     }
   </style>
 </head>
@@ -164,7 +165,10 @@
   <header class="header_section">
     <div class="container">
       <div class="nav-container">
-        <a class="thripudi-logo" href="index.html">Thripudi Library®</a>
+        <a class="thripudi-logo" href="index.html">
+          <img src="assets/cover/logo.png" alt="Thripudi Logo" class="logo-img-main">
+          <span>Thripudi Library®</span>
+        </a>
         <div class="nav-links-group">
           <a class="nav-btn active" href="dashboard.html">Dashboard</a>
           <a class="nav-btn" href="login.html">Login</a>
@@ -247,57 +251,46 @@
   </footer>
 
   <script>
-    // നന്ദകുമാർ നൽകിയ കൃത്യമായ ഇമേജ് ഐഡികൾ ഇവിടെ ഉപയോഗിക്കുന്നു
     const libraryData = [
       { name: "Agatha Christie Books", id: "13J_Ml41jY9G_Iy6lZOeRFjMnd8HlIXmY" },
       { name: "Plato Books", id: "1BWOvtAKQPoyRUMqLcvP14sVYM8aMo_mK" },
       { name: "Aristotle Books", id: "1DphPFMDXE5Ostg6dk4hOHzReltngA8He" },
-{ name: "changampuzha", id: "1ZL6lLoGou1WWzuM_T4dIeC4Vk3b5xugi" },
-{ name: "ulloor", id: "1aQfKxBj89D6MRyy-dd5nWJAyi3OHGAhZ" },
-{ name: "thikkodiyan", id: "1WqchqLpiqN0DxYTv1wUyOkwXKupboquI" },
+      { name: "changampuzha", id: "1ZL6lLoGou1WWzuM_T4dIeC4Vk3b5xugi" },
+      { name: "ulloor", id: "1aQfKxBj89D6MRyy-dd5nWJAyi3OHGAhZ" },
+      { name: "thikkodiyan", id: "1WqchqLpiqN0DxYTv1wUyOkwXKupboquI" },
       { name: "Arthur Conan Doyle Books", id: "1QH14rIMhaGsCY8nsGz8LtQydH7CndeAw" },
       { name: "Edgar Allan Poe Books", id: "1n-qlBnMYtVpRRqepmziIM9JFTWopR2ML" },
       { name: "Bagavada", id: "1VywuK_Z1ybQW3voEc3F6mQ7O8cGw7GvR" },
-{ name: "kumaranassan", id: "1eTxMxFwq8aV4GBntEekeKbprSU_UXSd9" },
-{ name: "rigvedam", id: "1FbCd9aAYP2BmmDJcSePGWbDdlw5Y6RVL" },
-{ name: "Data Analysis", id: "1nboCklxhOzsALdALxt7taXukNgl6R3tM" },
-{ name: "Quantum Computing", id: "19fRq9daUAQlHqDDKC9M0G7iej3IgxcAN" },
-{ name: "Software Engineering", id: "1QK3Ya0OfsX9yFuTavHcUp4wglnxGe2D9" },
-{ name: "Microsoft Excel", id: "13-qcDfGmy0i18kHAXw51uTDgGls_cu6c" },
+      { name: "kumaranassan", id: "1eTxMxFwq8aV4GBntEekeKbprSU_UXSd9" },
+      { name: "rigvedam", id: "1FbCd9aAYP2BmmDJcSePGWbDdlw5Y6RVL" },
+      { name: "Data Analysis", id: "1nboCklxhOzsALdALxt7taXukNgl6R3tM" },
+      { name: "Quantum Computing", id: "19fRq9daUAQlHqDDKC9M0G7iej3IgxcAN" },
+      { name: "Software Engineering", id: "1QK3Ya0OfsX9yFuTavHcUp4wglnxGe2D9" },
+      { name: "Microsoft Excel", id: "13-qcDfGmy0i18kHAXw51uTDgGls_cu6c" },
       { name: "Artificial Intelligence", id: "1SuzLAeZWBICkvSgHxgiiGlqSbf_Eyx_K" },
-{ name: "Intrigue Novels", id: "1orhMJqTZaFQDuXB8dpeaXbb-R3ZIw5bg" },
-{ name: "Suspense Novels", id: "1QdKWYP6uTI5KovHxbUfblrsg7vajtr8R" },
-{ name: "Police Novels", id: "1LoV62EH-iBc0XEoq8R12X9htiyCCtmG3" },
-{ name: "Mistery Novels", id: "10kUe4wMoF_EsFF3Hug1pMg1i-jOsip5c" },
+      { name: "Intrigue Novels", id: "1orhMJqTZaFQDuXB8dpeaXbb-R3ZIw5bg" },
+      { name: "Suspense Novels", id: "1QdKWYP6uTI5KovHxbUfblrsg7vajtr8R" },
+      { name: "Police Novels", id: "1LoV62EH-iBc0XEoq8R12X9htiyCCtmG3" },
+      { name: "Mistery Novels", id: "10kUe4wMoF_EsFF3Hug1pMg1i-jOsip5c" },
       { name: "Vampire Novels", id: "1gJkAVKBOQf776lOm5OPAtZz-_ZcXhRn6" },
-      { name: "vallathol", id: "1TMc3PyL-cJFjUhn-8Rsi1T5FMsl37Vk5" }   
-
+      { name: "vallathol", id: "1TMc3PyL-cJFjUhn-8Rsi1T5FMsl37Vk5" }    
     ];
 
     function initAutoScroll() {
       const engine = document.getElementById('scroll-engine');
       if (!engine) return;
-
-      // റാൻഡം ഓർഡറിൽ കാണിക്കാൻ ഷഫിൾ ചെയ്യുന്നു
       const shuffled = [...libraryData].sort(() => 0.5 - Math.random());
-      // സ്മൂത്ത് സ്ക്രോളിംഗിനായി ലിസ്റ്റ് ആവർത്തിക്കുന്നു
       const fullList = [...shuffled, ...shuffled, ...shuffled];
-      
       const logoPlaceholder = "https://drive.google.com/thumbnail?id=1DuMrsRg-QsW9mf5lV4uK8eWn8oiofz5r&sz=w300"; 
 
       engine.innerHTML = fullList.map((item) => {
-        // ഡ്രൈവ് ഐഡി ഉപയോഗിച്ച് കവർ ചിത്രം ലോഡ് ചെയ്യുന്നു
         const thumbUrl = `https://drive.google.com/thumbnail?id=${item.id}&sz=w600`;
-        // ഫയൽ ലിങ്ക് പാത്ത് (ഉദാ: Plato Books -> plato_books.html)
         const fileLink = item.name.toLowerCase().replace(/\s+/g, '_') + ".html";
-
         return `
           <a href="${fileLink}" style="text-decoration: none;">
             <div class="book-card">
               <div class="cover-container">
-                <img src="${thumbUrl}" 
-                     onerror="this.src='${logoPlaceholder}';" 
-                     alt="${item.name}">
+                <img src="${thumbUrl}" onerror="this.src='${logoPlaceholder}';" alt="${item.name}">
               </div>
               <h6>${item.name}</h6>
             </div>
@@ -305,7 +298,6 @@
         `;
       }).join('');
     }
-    
     window.onload = initAutoScroll;
   </script>
 </body>

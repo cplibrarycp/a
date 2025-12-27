@@ -1,4 +1,4 @@
-// --- THRIPUDI LIBRARY MASTER SCRIPT (V10 - MUSIC & VIDEO FIXED) ---
+// --- THRIPUDI LIBRARY STABLE MASTER SCRIPT ---
 
 const firebaseConfig = { 
     apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", 
@@ -9,13 +9,15 @@ const firebaseConfig = {
     appId: "1:887018912750:web:cc05190a72b13db816acff" 
 };
 
-if (typeof firebase !== 'undefined' && !firebase.apps.length) {
+// ഫയർബേസ് ഇനിഷ്യലൈസേഷൻ
+if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
-const auth = (typeof firebase !== 'undefined') ? firebase.auth() : null;
+const auth = firebase.auth();
+let currentAudioId = null;
 let bgMusic;
 
-// 1. മ്യൂസിക് സിസ്റ്റം
+// 1. മ്യൂസിക് സിസ്റ്റം ഇൻജക്ഷൻ (പഴയ ലോജിക്കിനെ ബാധിക്കില്ല)
 function injectMusicSystem() {
     if (document.getElementById('bgMusic')) return;
     const audioHTML = `<audio id="bgMusic" loop preload="auto"><source src="assets/cover/bg.mp3" type="audio/mpeg"></audio>`;
@@ -24,110 +26,120 @@ function injectMusicSystem() {
     if (bgMusic) bgMusic.volume = 0.2;
 
     const navSearch = setInterval(() => {
-        const navLinks = document.querySelector('.nav-links') || document.querySelector('.navbar') || document.querySelector('header .container');
+        const navLinks = document.querySelector('.nav-links') || document.querySelector('.navbar');
         if (navLinks && !document.getElementById('music-nav-item')) {
             const musicBtnHTML = `<a class="nav-item" id="music-nav-item" href="javascript:void(0)" onclick="toggleBGMusic()" style="font-weight:bold; color:#004D40; cursor:pointer; display:inline-flex; align-items:center; gap:5px; margin-right:10px;"><i id="music-icon" class="fas fa-volume-mute"></i> Music</a>`;
             navLinks.insertAdjacentHTML('afterbegin', musicBtnHTML);
             clearInterval(navSearch);
         }
-    }, 100);
+    }, 500);
 }
 
 window.toggleBGMusic = function() {
-    const musicIcon = document.getElementById("music-icon");
+    const icon = document.getElementById("music-icon");
     if (!bgMusic) bgMusic = document.getElementById("bgMusic");
-    
     if (bgMusic.paused) {
-        bgMusic.play();
-        if(musicIcon) musicIcon.className = "fas fa-volume-up";
+        bgMusic.play().then(() => { if(icon) icon.className = "fas fa-volume-up"; });
     } else {
         bgMusic.pause();
-        if(musicIcon) musicIcon.className = "fas fa-volume-mute";
+        if(icon) icon.className = "fas fa-volume-mute";
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    injectMusicSystem();
-    setupProfileDropdown();
-    if (auth) {
-        auth.onAuthStateChanged(user => {
-            const dName = document.getElementById('display-name');
-            const userAvatarImg = document.getElementById('user-avatar-img');
-            if (user) {
-                if(dName) dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
-                if(userAvatarImg) userAvatarImg.src = user.photoURL || 'assets/cover/default_user.jpg';
-            } else {
-                if(dName) dName.innerText = "അതിഥി";
-                if(userAvatarImg) userAvatarImg.src = 'assets/cover/default_user.jpg';
-            }
-        });
-    }
-});
+    injectMusicSystem(); // മ്യൂസിക് ലോഡ് ചെയ്യുന്നു
+    const userAvatarImg = document.getElementById('user-avatar-img');
+    const defaultUserImg = 'assets/cover/default_user.jpg';
+    const dName = document.getElementById('display-name');
 
-function setupProfileDropdown() {
+    auth.onAuthStateChanged(user => {
+        if (user) {
+            if(dName) dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
+            if(userAvatarImg) userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
+        } else {
+            if(userAvatarImg) userAvatarImg.src = defaultUserImg;
+            if(dName) dName.innerText = "അതിഥി";
+        }
+    });
+
     const profileBtn = document.getElementById('user-profile-btn');
     const dropdown = document.getElementById('profile-dropdown');
-    if (profileBtn && dropdown) {
-        profileBtn.onclick = function(e) {
+    if (profileBtn) {
+        profileBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-        };
+        });
     }
-}
-window.onclick = () => { if(document.getElementById('profile-dropdown')) document.getElementById('profile-dropdown').style.display = 'none'; };
+    window.addEventListener('click', () => { if(dropdown) dropdown.style.display = 'none'; });
+});
 
-// 2. ആക്സസ് & പ്ലെയർ ലോജിക്
+// 2. ആക്സസ് ലോജിക് (താങ്കളുടെ പഴയ കോഡ് - വീഡിയോ ബാക്ക് ബട്ടൺ മാത്രം ചേർത്തു)
 window.checkAccess = function(id, type, cardId) {
-    if (auth && !auth.currentUser) {
-        if(document.getElementById('loginAlertModal')) document.getElementById('loginAlertModal').style.display = 'flex';
-        return;
-    }
+    if (!auth.currentUser) {
+        let msg = "ലോഗിൻ ചെയ്യുക";
+        if(type === 'pdf') msg = "വായിക്കാനായി ലോഗിൻ ചെയ്യുക";
+        else if(type === 'audio') msg = "കേൾക്കാനായി ലോഗിൻ ചെയ്യുക";
+        else if(type === 'video') msg = "കാണാനായി ലോഗിൻ ചെയ്യുക";
+        document.getElementById('loginMsg').innerText = msg;
+        const currentPage = window.location.pathname.split("/").pop();
+        document.getElementById('login-btn-link').href = `login.html?redirect=${currentPage}`;
+        document.getElementById('loginAlertModal').style.setProperty('display', 'flex', 'important');
+    } else {
+        const cardElement = document.getElementById(cardId);
+        const bName = cardElement.querySelector('.book-title').innerText;
+        const bThumb = cardElement.querySelector('.book-cover').src;
+        const uid = auth.currentUser.uid;
 
-    // ഹിസ്റ്ററി സേവിംഗ്
-    const card = document.getElementById(cardId);
-    if (card && auth.currentUser) {
-        const title = card.querySelector('.book-title').innerText;
-        const img = card.querySelector('.book-cover').src;
-        let history = JSON.parse(localStorage.getItem('thripudi_history_' + auth.currentUser.uid)) || [];
+        let history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
         history = history.filter(item => item.id !== id);
-        history.push({ id, name: title, thumb: img, date: new Date().toLocaleDateString('ml-IN') });
-        localStorage.setItem('thripudi_history_' + auth.currentUser.uid, JSON.stringify(history.slice(-20)));
-    }
+        history.push({ id: id, name: bName, thumb: bThumb, date: new Date().toLocaleDateString('ml-IN') });
+        if (history.length > 20) history.shift();
+        localStorage.setItem('thripudi_history_' + uid, JSON.stringify(history));
 
-    if(type !== 'pdf' && bgMusic) bgMusic.pause();
+        // സംഗീതം നിർത്തുന്നു
+        if(type !== 'pdf' && bgMusic) bgMusic.pause();
 
-    if (type === 'audio') {
-        document.getElementById('player-' + id).innerHTML = `<div style="width:100px; height:50px; position:absolute; top:0; right:0; z-index:99999;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%;height:100%;border:none;"></iframe>`;
-    } else if (type === 'video') {
-        window.history.pushState({modalOpen: "video"}, ""); 
-        document.getElementById('videoFrameContainer').innerHTML = `
-            <div class="player-mask" style="width:70px; height:70px; position:absolute; top:0; right:0; z-index:99999; background:transparent;"></div>
-            <button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:100000; background:white; border:none; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;">
-                <i class="fas fa-arrow-left" style="color:#333; font-size:18px;"></i>
-            </button>
-            <iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%;height:100%;border:none;" allow="autoplay"></iframe>
-        `;
-        document.getElementById('videoOverlay').style.display = 'flex';
-        document.body.style.overflow = "hidden";
-    } else if (type === 'pdf') {
-        window.history.pushState({modalOpen: "pdf"}, "");
-        document.getElementById('pdfFrame').src = `https://drive.google.com/file/d/${id}/preview`;
-        document.getElementById('pdfModal').style.display = 'flex';
-        document.body.style.overflow = "hidden";
+        if (type === 'audio') {
+            if (currentAudioId && currentAudioId !== id) {
+                document.getElementById('player-' + currentAudioId).innerHTML = "";
+                document.getElementById('card-' + currentAudioId).classList.remove('audio-active');
+            }
+            // താങ്കളുടെ പഴയ അതേ പ്ലെയർ ഇൻജക്ഷൻ
+            document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:80px;height:50px;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>`;
+            document.getElementById(cardId).classList.add('audio-active');
+            currentAudioId = id;
+        } else if (type === 'video') {
+            // ബാക്ക് ബട്ടണിനായി ഹിസ്റ്ററി സ്റ്റേറ്റ് ചേർക്കുന്നു
+            window.history.pushState({modal: "video"}, ""); 
+            
+            // വൈറ്റ് ബാക്ക് ബട്ടൺ സഹിതമുള്ള വീഡിയോ പ്ലെയർ
+            document.getElementById('videoFrameContainer').innerHTML = `
+                <div class="player-mask" style="width:70px; height:70px; position:absolute; top:0; right:0; z-index:999; background:transparent;"></div>
+                <button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1000; background:white; border:none; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;">
+                    <i class="fas fa-arrow-left" style="color:#333; font-size:18px;"></i>
+                </button>
+                <iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
+            document.getElementById('videoOverlay').style.display = 'flex';
+            document.body.style.overflow = "hidden";
+        } else {
+            window.history.pushState({modal: "pdf"}, "");
+            document.getElementById('pdfFrame').src = `https://drive.google.com/file/d/${id}/preview?rm=minimal`;
+            document.getElementById('pdfModal').style.display = 'flex';
+            document.body.style.overflow = "hidden";
+        }
     }
 };
 
+// 3. നാവിഗേഷൻ ലോജിക്
 window.onpopstate = function() {
     if (document.getElementById('videoOverlay').style.display === 'flex') closeVideoLogic();
-    else if (document.getElementById('pdfModal').style.display === 'flex') closePdfLogic();
+    if (document.getElementById('pdfModal').style.display === 'flex') closePdfLogic();
 };
 
 function closeVideoLogic() {
     document.getElementById('videoOverlay').style.display = 'none';
     document.getElementById('videoFrameContainer').innerHTML = "";
     document.body.style.overflow = "auto";
-    const mIcon = document.getElementById("music-icon");
-    if (bgMusic && mIcon && mIcon.classList.contains("fa-volume-up")) bgMusic.play();
 }
 
 function closePdfLogic() {
@@ -136,15 +148,13 @@ function closePdfLogic() {
     document.body.style.overflow = "auto";
 }
 
-window.closeVideo = function() {
-    if (window.history.state && window.history.state.modalOpen === "video") window.history.back();
-    else closeVideoLogic();
-};
-
-window.closePdfModal = function() {
-    if (window.history.state && window.history.state.modalOpen === "pdf") window.history.back();
-    else closePdfLogic();
-};
-
-window.logoutUser = () => auth.signOut().then(() => window.location.href = "logout_success.html");
-window.closeLoginPopup = () => document.getElementById('loginAlertModal').style.display = 'none';
+function logoutUser() { auth.signOut().then(() => { window.location.href = "logout_success.html"; }); }
+function closeLoginPopup() { document.getElementById('loginAlertModal').style.setProperty('display', 'none', 'important'); }
+function closeVideo() { 
+    if (window.history.state && window.history.state.modal === "video") window.history.back(); 
+    else closeVideoLogic(); 
+}
+function closePdfModal() { 
+    if (window.history.state && window.history.state.modal === "pdf") window.history.back(); 
+    else closePdfLogic(); 
+}

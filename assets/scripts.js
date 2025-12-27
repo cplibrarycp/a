@@ -1,4 +1,4 @@
-// --- THRIPUDI LIBRARY MASTER SCRIPT (V6 - STABLE BACK & MASK FIXED) ---
+// --- THRIPUDI LIBRARY FINAL MASTER SCRIPT (V7 - PERMANENT BACK & MASK) ---
 
 const firebaseConfig = { 
     apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", 
@@ -38,7 +38,7 @@ window.toggleBGMusic = function() {
     const musicIcon = document.getElementById("music-icon");
     if (!bgMusic) bgMusic = document.getElementById("bgMusic");
     if (bgMusic.paused) {
-        bgMusic.play().then(() => { if(musicIcon) musicIcon.className = "fas fa-volume-up"; }).catch(e => console.log("User Interaction Needed"));
+        bgMusic.play().then(() => { if(musicIcon) musicIcon.className = "fas fa-volume-up"; }).catch(e => console.log("Interaction Needed"));
     } else {
         bgMusic.pause();
         if(musicIcon) musicIcon.className = "fas fa-volume-mute";
@@ -75,7 +75,7 @@ function setupProfileDropdown() {
 }
 window.onclick = () => { if(document.getElementById('profile-dropdown')) document.getElementById('profile-dropdown').style.display = 'none'; };
 
-// 2. ആക്സസ് & ബാക്ക് ബട്ടൺ ലോജിക്
+// 2. ആക്സസ് & ബാക്ക് ബട്ടൺ ലോജിക് (STABLE LOGIC)
 window.checkAccess = function(id, type, cardId) {
     if (auth && !auth.currentUser) {
         if(document.getElementById('loginAlertModal')) document.getElementById('loginAlertModal').style.display = 'flex';
@@ -95,14 +95,18 @@ window.checkAccess = function(id, type, cardId) {
     if(type !== 'pdf' && bgMusic) bgMusic.pause();
 
     if (type === 'audio') {
-        document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:100px; height:50px; position:absolute; top:0; right:0; z-index:10;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%;height:100%;border:none;"></iframe>`;
+        document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:100px; height:50px; position:absolute; top:0; right:0; z-index:99999;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%;height:100%;border:none;"></iframe>`;
     } else if (type === 'video') {
-        // ഹിസ്റ്ററി പുഷ് (മൊബൈൽ ബാക്ക് ബട്ടണിനായി)
         window.history.pushState({modalOpen: "video"}, ""); 
         
-        // വീഡിയോ പ്ലെയർ മാസ്ക് സഹിതം തുറക്കുന്നു
+        // വീഡിയോ പ്ലെയർ ഡിസൈൻ - വൈറ്റ് ബാക്ക് ബട്ടൺ & പോപ്പൗട്ട് മാസ്ക്
         document.getElementById('videoFrameContainer').innerHTML = `
-            <div class="player-mask" style="width:60px; height:60px; position:absolute; top:0; right:0; z-index:100;"></div>
+            <div class="player-mask" style="width:70px; height:70px; position:absolute; top:0; right:0; z-index:99999; background:transparent;"></div>
+            
+            <button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:100000; background:white; border:none; border-radius:50%; width:35px; height:35px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;">
+                <i class="fas fa-arrow-left" style="color:#333; font-size:18px;"></i>
+            </button>
+
             <iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%;height:100%;border:none;" allow="autoplay"></iframe>
         `;
         document.getElementById('videoOverlay').style.display = 'flex';
@@ -115,7 +119,6 @@ window.checkAccess = function(id, type, cardId) {
     }
 };
 
-// മൊബൈൽ ബാക്ക് ബട്ടൺ തിരിച്ചറിയുന്നു
 window.onpopstate = function(event) {
     if (document.getElementById('videoOverlay').style.display === 'flex') {
         closeVideoLogic();
@@ -136,11 +139,13 @@ function closePdfLogic() {
     document.getElementById('pdfModal').style.display = 'none';
     document.getElementById('pdfFrame').src = "";
     document.body.style.overflow = "auto";
+    const mIcon = document.getElementById("music-icon");
+    if (bgMusic && mIcon && mIcon.classList.contains("fa-volume-up")) bgMusic.play();
 }
 
 window.closeVideo = function() {
     if (window.history.state && window.history.state.modalOpen === "video") {
-        window.history.back(); // ഇത് onpopstate വഴി closeVideoLogic വിളിക്കും
+        window.history.back();
     } else {
         closeVideoLogic();
     }

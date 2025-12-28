@@ -15,7 +15,6 @@
             margin: 0 auto; text-align: center; border: 4px solid var(--outline-color); 
         }
         
-        /* ഫോട്ടോ അപ്‌ലോഡ് ഏരിയ */
         .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 20px; cursor: pointer; }
         .avatar-circle { 
             width: 100%; height: 100%; background: var(--background-light); 
@@ -29,7 +28,6 @@
             display: flex; align-items: center; justify-content: center; border: 2px solid white;
         }
 
-        /* Progress Bar Styles */
         .progress-container { margin-bottom: 25px; text-align: left; background: #f0f0f0; padding: 15px; border-radius: 12px; }
         .progress-label { display: flex; justify-content: space-between; font-size: 0.8em; font-weight: bold; margin-bottom: 5px; }
         .progress-bar-bg { width: 100%; height: 8px; background: #ddd; border-radius: 10px; overflow: hidden; }
@@ -176,7 +174,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzqHgxaVZm3AsDz7_uL2rIRM408B-Yfaj6wmnP5vb7kLclzqHPYtvHqWvhhz3nEENZn-A/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxRJnzAiu7Xzp-Sfl3s22Pr9D_dfZv4-YlyDncOSUpW1b2LPDF4JNUv_5YEklxrQ9R-_g/exec";
 
     const nameBox = document.getElementById('nameBox');
     const ageBox = document.getElementById('ageBox');
@@ -193,15 +191,25 @@
 
     let fileData = null;
 
-    // കൂടുതൽ വിവരങ്ങൾ ലോക്കൽ സ്റ്റോറേജിൽ നിന്ന് എടുക്കുന്നു
-    const loadExtraData = () => {
-        const savedData = JSON.parse(localStorage.getItem('user_extra_info') || '{}');
-        ageBox.value = savedData.age || "";
-        genderBox.value = savedData.gender || "";
-        phoneBox.value = savedData.phone || "";
-        whatsappBox.value = savedData.whatsapp || "";
-        addressBox.value = savedData.address || "";
-        calculateProgress();
+    // ഗൂഗിൾ ഷീറ്റിൽ നിന്ന് വിവരങ്ങൾ എടുക്കുന്ന ഫങ്ക്ഷൻ
+    const loadExtraData = async (email) => {
+        try {
+            const response = await fetch(`${SCRIPT_URL}?email=${email}`);
+            const result = await response.json();
+            if (result.result === "Success") {
+                const d = result.data;
+                ageBox.value = d.age || "";
+                genderBox.value = d.gender || "";
+                phoneBox.value = d.phone || "";
+                whatsappBox.value = d.whatsapp || "";
+                addressBox.value = d.address || "";
+                if(d.photoUrl) {
+                    currentPic.src = d.photoUrl;
+                    userAvatarImg.src = d.photoUrl;
+                }
+                calculateProgress();
+            }
+        } catch (e) { console.error("Error loading data from Sheet"); }
     };
 
     onAuthStateChanged(auth, (user) => {
@@ -212,16 +220,17 @@
             const photo = user.photoURL || 'assets/cover/default_user.jpg';
             currentPic.src = photo;
             userAvatarImg.src = photo;
-            loadExtraData();
+            
+            // ഷീറ്റിൽ നിന്ന് വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു
+            loadExtraData(user.email);
         } else { location.href = "login.html"; }
     });
 
-    // പ്രോഗ്രസ് കണക്കാക്കുന്ന ഫംഗ്ഷൻ
     window.calculateProgress = () => {
         const fields = [nameBox, ageBox, genderBox, phoneBox, whatsappBox, addressBox];
         let filled = 0;
         fields.forEach(field => {
-            if (field.value.trim() !== "") filled++;
+            if (field.value && field.value.trim() !== "") filled++;
         });
         const percent = Math.round((filled / fields.length) * 100);
         document.getElementById('progress-bar').style.width = percent + '%';
@@ -248,52 +257,51 @@
         if (!user) return;
 
         saveBtn.disabled = true;
-        msg.innerText = "പ്രൊഫൈൽ പുതുക്കുന്നു...";
+        msg.innerText = "വിവരങ്ങൾ ഷീറ്റിലേക്ക് മാറ്റുന്നു...";
         msg.style.color = "blue";
 
         try {
-            let finalPhotoUrl = user.photoURL;
+            const formData = new URLSearchParams();
+            formData.append('action', 'saveProfile');
+            formData.append('email', user.email);
+            formData.append('name', nameBox.value);
+            formData.append('age', ageBox.value);
+            formData.append('gender', genderBox.value);
+            formData.append('phone', phoneBox.value);
+            formData.append('whatsapp', whatsappBox.value);
+            formData.append('address', addressBox.value);
+            formData.append('photoUrl', user.photoURL || "");
 
             if (fileData) {
-                const formData = new FormData();
                 formData.append('fileData', fileData.base64);
                 formData.append('mimeType', fileData.type);
-                formData.append('fileName', fileData.name);
-
-                const response = await fetch(SCRIPT_URL, {
-                    method: 'POST',
-                    body: new URLSearchParams(formData)
-                });
-                
-                const result = await response.json();
-                if (result.result === "Success") {
-                    finalPhotoUrl = result.url;
-                }
+                formData.append('fileName', user.uid + "_" + fileData.name);
             }
 
-            // ഫയർബേസ് അപ്ഡേറ്റ്
-            await updateProfile(user, { 
-                displayName: nameBox.value,
-                photoURL: finalPhotoUrl
+            const response = await fetch(SCRIPT_URL, {
+                method: 'POST',
+                body: formData
             });
+            
+            const result = await response.json();
+            
+            if (result.result === "Success") {
+                // ഫയർബേസ് അപ്ഡേറ്റ്
+                await updateProfile(user, { 
+                    displayName: nameBox.value,
+                    photoURL: result.photoUrl || user.photoURL 
+                });
 
-            // കൂടുതൽ വിവരങ്ങൾ ലോക്കൽ സ്റ്റോറേജിൽ സേവ് ചെയ്യുന്നു
-            const extraInfo = {
-                age: ageBox.value,
-                gender: genderBox.value,
-                phone: phoneBox.value,
-                whatsapp: whatsappBox.value,
-                address: addressBox.value
-            };
-            localStorage.setItem('user_extra_info', JSON.stringify(extraInfo));
-
-            msg.style.color = "green";
-            msg.innerText = "വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!";
-            setTimeout(() => location.reload(), 1000);
+                msg.style.color = "green";
+                msg.innerText = "വിവരങ്ങൾ ഗൂഗിൾ ഷീറ്റിൽ റെക്കോർഡ് ചെയ്തു!";
+                setTimeout(() => location.reload(), 1500);
+            } else {
+                throw new Error("Sheet save failed");
+            }
 
         } catch (e) {
             msg.style.color = "red";
-            msg.innerText = "Error: വിവരങ്ങൾ സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.";
+            msg.innerText = "സേവ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.";
             saveBtn.disabled = false;
         }
     };

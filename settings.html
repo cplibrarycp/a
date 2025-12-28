@@ -21,7 +21,8 @@
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 700; color: var(--secondary-dark); font-size: 0.85em; }
         input, textarea { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; font-family: inherit; }
-        .btn-update { background: var(--primary-teal); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        .btn-update { background: var(--primary-teal); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        #fileInput { display: none; }
     </style>
 </head>
 <body>
@@ -51,17 +52,20 @@
                 <div class="progress-label"><span>പ്രൊഫൈൽ പൂർണ്ണത</span><span id="progress-val">0%</span></div>
                 <div class="progress-bar-bg"><div class="progress-bar-fill" id="progress-bar"></div></div>
             </div>
+
             <div class="avatar-wrapper" onclick="document.getElementById('fileInput').click()">
                 <div class="avatar-circle"><img id="currentPic" src="assets/cover/default_user.jpg"></div>
                 <div class="upload-hint"><i class="fas fa-camera"></i></div>
                 <input type="file" id="fileInput" accept="image/*" style="display: none;">
             </div>
+
             <h2 style="color: var(--secondary-dark); margin-bottom: 20px;">പ്രൊഫൈൽ ക്രമീകരണങ്ങൾ</h2>
             <div class="form-group"><label>ഇമെയിൽ</label><input type="text" id="emailBox" disabled></div>
-            <div class="form-group"><label>പേര്</label><input type="text" id="nameBox" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>വയസ്സ്</label><input type="number" id="ageBox" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phoneBox" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>അഡ്രസ്സ്</label><textarea id="addressBox" rows="2" oninput="calculateProgress()"></textarea></div>
+            <div class="form-group"><label>പേര് (Display Name)</label><input type="text" id="nameBox" placeholder="നിങ്ങളുടെ പേര്" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>വയസ്സ്</label><input type="number" id="ageBox" placeholder="വയസ്സ്" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>ഫോൺ നമ്പർ</label><input type="tel" id="phoneBox" placeholder="ഫോൺ നമ്പർ" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>അഡ്രസ്സ്</label><textarea id="addressBox" rows="2" placeholder="അഡ്രസ്സ്" oninput="calculateProgress()"></textarea></div>
+            
             <button class="btn-update" id="saveBtn">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
             <div id="msg" style="margin-top:15px; font-size:0.85em; font-weight:600;"></div>
         </div>
@@ -89,26 +93,29 @@
             const photo = user.photoURL || 'assets/cover/default_user.jpg';
             currentPic.src = photo; userAvatarImg.src = photo;
 
-            fetch(`${SCRIPT_URL}?email=${user.email}`).then(r => r.json()).then(res => {
-                if(res.result === "Success") {
-                    ageBox.value = res.data.age || "";
-                    phoneBox.value = res.data.phone || "";
-                    addressBox.value = res.data.address || "";
-                    calculateProgress();
-                }
-            });
+            // ഷീറ്റിൽ നിന്ന് ഡാറ്റ ലോഡ് ചെയ്യുന്നു
+            fetch(`${SCRIPT_URL}?email=${user.email}`)
+                .then(res => res.json())
+                .then(res => {
+                    if(res.result === "Success") {
+                        ageBox.value = res.data.age || ""; phoneBox.value = res.data.phone || ""; addressBox.value = res.data.address || "";
+                        calculateProgress();
+                    }
+                }).catch(e => console.log("Load error"));
         }
     });
 
     window.calculateProgress = () => {
         const fields = [nameBox, ageBox, phoneBox, addressBox];
         let filled = fields.filter(f => f.value.trim() !== "").length;
-        document.getElementById('progress-bar').style.width = Math.round((filled/4)*100) + '%';
-        document.getElementById('progress-val').innerText = Math.round((filled/4)*100) + '%';
+        const percent = Math.round((filled / 4) * 100);
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-val').innerText = percent + '%';
     };
 
     document.getElementById('fileInput').onchange = (e) => {
         const file = e.target.files[0];
+        if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
             currentPic.src = ev.target.result;
@@ -119,23 +126,27 @@
 
     saveBtn.onclick = async () => {
         const user = auth.currentUser; if (!user) return;
-        saveBtn.disabled = true; msg.innerText = "സേവ് ചെയ്യുന്നു...";
+        saveBtn.disabled = true; msg.innerText = "വിവരങ്ങൾ പുതുക്കുന്നു..."; msg.style.color = "blue";
 
         try {
-            let photoUrl = user.photoURL;
+            let finalPhotoUrl = user.photoURL;
 
-            // ഫോട്ടോ അപ്‌ലോഡിംഗ് - പഴയ വർക്കിംഗ് ലോജിക്
+            // 1. പഴയ ഫോട്ടോ അപ്‌ലോഡ് ലോജിക് (മാറ്റമില്ലാത്തത്)
             if (fileData) {
                 const p = new URLSearchParams();
                 p.append('fileData', fileData.base64);
                 p.append('mimeType', fileData.type);
-                p.append('fileName', fileData.name);
+                p.append('fileName', fileData.name.replace(/[^a-zA-Z0-9.]/g, "_"));
+
                 const r = await fetch(SCRIPT_URL, { method: 'POST', body: p });
                 const j = await r.json();
-                if (j.result === "Success") photoUrl = j.url; // പഴയ സ്ക്രിപ്റ്റിൽ j.url ആണ് വരുന്നത്
+                if (j.result === "Success") finalPhotoUrl = j.url || j.photoUrl;
             }
 
-            // ഷീറ്റിലേക്ക് വിവരങ്ങൾ സേവ് ചെയ്യുന്നു
+            // 2. ഫയർബേസ് പ്രൊഫൈൽ ആദ്യം അപ്‌ഡേറ്റ് ചെയ്യുന്നു (GitHub-ൽ ഉടൻ മാറാൻ)
+            await user.updateProfile({ displayName: nameBox.value, photoURL: finalPhotoUrl });
+
+            // 3. അധികമായി വിവരങ്ങൾ ഷീറ്റിലേക്ക് അയക്കുന്നു
             const s = new URLSearchParams();
             s.append('action', 'saveProfile');
             s.append('email', user.email);
@@ -145,16 +156,11 @@
             s.append('address', addressBox.value);
             await fetch(SCRIPT_URL, { method: 'POST', body: s });
 
-            // ഫയർബേസ് പ്രൊഫൈൽ അപ്‌ഡേറ്റ് - വേർഷൻ 8 മാജിക്
-            await user.updateProfile({
-                displayName: nameBox.value,
-                photoURL: photoUrl
-            });
-
             msg.style.color = "green"; msg.innerText = "വിജയകരമായി സേവ് ചെയ്തു!";
             setTimeout(() => location.reload(), 1000);
+
         } catch (e) {
-            msg.style.color = "red"; msg.innerText = "പിശക്!";
+            msg.style.color = "red"; msg.innerText = "Error: സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.";
             saveBtn.disabled = false;
         }
     };

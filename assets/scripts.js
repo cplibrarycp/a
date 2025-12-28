@@ -1,5 +1,5 @@
 /* Project Logic - Thripudi Master Template Scripts
-   Universal fix for Exit Button, Single Audio Player & Video Masking
+   Final Fix for Video Login Issue, Exit Button, Single Audio Player & Video Masking
 */
 
 const firebaseConfig = { 
@@ -137,8 +137,8 @@ window.checkAccess = function(id, type, cardId) {
         document.getElementById(cardId).classList.add('audio-active');
     } else if (type === 'video') {
         window.history.pushState({modalOpen: "video"}, ""); 
-        // വീഡിയോ മാസ്കിംഗ് തിരികെ ചേർത്തു
-        document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1001; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><div class="player-mask" style="width:60px; height:60px; position:absolute; right:0; top:0; z-index:1000;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
+        // വീഡിയോ പ്ലെയർ ലോഗിൻ പ്രശ്നം പരിഹരിക്കാൻ ?rm=minimal ഒഴിവാക്കി
+        document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1001; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><div class="player-mask" style="width:60px; height:60px; position:absolute; right:0; top:0; z-index:1000;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
         document.getElementById('videoOverlay').style.display = 'flex';
     } else if (type === 'pdf') {
         window.history.pushState({modalOpen: "pdf"}, "");

@@ -20,7 +20,7 @@
         .progress-bar-fill { width: 0%; height: 100%; background: linear-gradient(90deg, #20c997, #007bff); transition: width 0.4s ease; }
         .form-group { margin-bottom: 15px; text-align: left; }
         label { display: block; margin-bottom: 5px; font-weight: 700; color: var(--secondary-dark); font-size: 0.85em; }
-        input, select, textarea { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; font-family: inherit; }
+        input, textarea { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; font-family: inherit; }
         .btn-update { background: var(--primary-teal); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
     </style>
 </head>
@@ -34,9 +34,6 @@
         </a>
         <div class="nav-links">
             <a class="nav-item" href="dashboard.html">Home</a>
-            <a class="nav-item" href="collection.html">ശേഖരം</a>
-            <a class="nav-item" href="about.html">About</a>
-            <a class="nav-item" href="contact.html">Contact</a>
             <div class="user-profile" id="user-profile-btn">
                 <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
@@ -61,10 +58,10 @@
             </div>
             <h2 style="color: var(--secondary-dark); margin-bottom: 20px;">പ്രൊഫൈൽ ക്രമീകരണങ്ങൾ</h2>
             <div class="form-group"><label>ഇമെയിൽ</label><input type="text" id="emailBox" disabled></div>
-            <div class="form-group"><label>പേര്</label><input type="text" id="nameBox" placeholder="പേര്" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>വയസ്സ്</label><input type="number" id="ageBox" placeholder="വയസ്സ്" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phoneBox" placeholder="ഫോൺ" oninput="calculateProgress()"></div>
-            <div class="form-group"><label>അഡ്രസ്സ്</label><textarea id="addressBox" rows="2" placeholder="അഡ്രസ്സ്" oninput="calculateProgress()"></textarea></div>
+            <div class="form-group"><label>പേര്</label><input type="text" id="nameBox" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>വയസ്സ്</label><input type="number" id="ageBox" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phoneBox" oninput="calculateProgress()"></div>
+            <div class="form-group"><label>അഡ്രസ്സ്</label><textarea id="addressBox" rows="2" oninput="calculateProgress()"></textarea></div>
             <button class="btn-update" id="saveBtn">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
             <div id="msg" style="margin-top:15px; font-size:0.85em; font-weight:600;"></div>
         </div>
@@ -78,7 +75,6 @@
     const firebaseConfig = { apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", authDomain: "thripudilibrary.firebaseapp.com", projectId: "thripudilibrary" };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwone2MeuhMzyFXTYFKHW0OOherDw4wo517f7daK1bs6VxV7A2XvQkpRaKVBO4_FHSjGw/exec";
 
     const nameBox = document.getElementById('nameBox'), ageBox = document.getElementById('ageBox'), phoneBox = document.getElementById('phoneBox'), addressBox = document.getElementById('addressBox'), currentPic = document.getElementById('currentPic'), userAvatarImg = document.getElementById('user-avatar-img'), dName = document.getElementById('display-name'), msg = document.getElementById('msg'), saveBtn = document.getElementById('saveBtn');
@@ -91,33 +87,28 @@
             nameBox.value = user.displayName || "";
             dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്ത്";
             const photo = user.photoURL || 'assets/cover/default_user.jpg';
-            currentPic.src = photo;
-            userAvatarImg.src = photo;
+            currentPic.src = photo; userAvatarImg.src = photo;
 
-            fetch(`${SCRIPT_URL}?email=${user.email}`)
-                .then(res => res.json())
-                .then(res => {
-                    if(res.result === "Success") {
-                        ageBox.value = res.data.age || "";
-                        phoneBox.value = res.data.phone || "";
-                        addressBox.value = res.data.address || "";
-                        calculateProgress();
-                    }
-                });
-        } else { location.href = "login.html"; }
+            fetch(`${SCRIPT_URL}?email=${user.email}`).then(r => r.json()).then(res => {
+                if(res.result === "Success") {
+                    ageBox.value = res.data.age || "";
+                    phoneBox.value = res.data.phone || "";
+                    addressBox.value = res.data.address || "";
+                    calculateProgress();
+                }
+            });
+        }
     });
 
     window.calculateProgress = () => {
         const fields = [nameBox, ageBox, phoneBox, addressBox];
         let filled = fields.filter(f => f.value.trim() !== "").length;
-        const percent = Math.round((filled / fields.length) * 100);
-        document.getElementById('progress-bar').style.width = percent + '%';
-        document.getElementById('progress-val').innerText = percent + '%';
+        document.getElementById('progress-bar').style.width = Math.round((filled/4)*100) + '%';
+        document.getElementById('progress-val').innerText = Math.round((filled/4)*100) + '%';
     };
 
     document.getElementById('fileInput').onchange = (e) => {
         const file = e.target.files[0];
-        if (!file) return;
         const reader = new FileReader();
         reader.onload = (ev) => {
             currentPic.src = ev.target.result;
@@ -127,26 +118,24 @@
     };
 
     saveBtn.onclick = async () => {
-        const user = auth.currentUser;
-        if (!user) return;
-        saveBtn.disabled = true;
-        msg.innerText = "സേവ് ചെയ്യുന്നു...";
+        const user = auth.currentUser; if (!user) return;
+        saveBtn.disabled = true; msg.innerText = "സേവ് ചെയ്യുന്നു...";
 
         try {
-            let finalPhotoUrl = user.photoURL;
+            let photoUrl = user.photoURL;
 
-            // 1. Photo Upload to Drive
+            // ഫോട്ടോ അപ്‌ലോഡിംഗ് - പഴയ വർക്കിംഗ് ലോജിക്
             if (fileData) {
                 const p = new URLSearchParams();
                 p.append('fileData', fileData.base64);
                 p.append('mimeType', fileData.type);
-                p.append('fileName', fileData.name.replace(/[^a-zA-Z0-9.]/g, "_"));
+                p.append('fileName', fileData.name);
                 const r = await fetch(SCRIPT_URL, { method: 'POST', body: p });
                 const j = await r.json();
-                if (j.result === "Success") finalPhotoUrl = j.photoUrl || j.url;
+                if (j.result === "Success") photoUrl = j.url; // പഴയ സ്ക്രിപ്റ്റിൽ j.url ആണ് വരുന്നത്
             }
 
-            // 2. Save Data to Sheet
+            // ഷീറ്റിലേക്ക് വിവരങ്ങൾ സേവ് ചെയ്യുന്നു
             const s = new URLSearchParams();
             s.append('action', 'saveProfile');
             s.append('email', user.email);
@@ -156,19 +145,16 @@
             s.append('address', addressBox.value);
             await fetch(SCRIPT_URL, { method: 'POST', body: s });
 
-            // 3. Update Firebase Profile (Version 8 Style)
+            // ഫയർബേസ് പ്രൊഫൈൽ അപ്‌ഡേറ്റ് - വേർഷൻ 8 മാജിക്
             await user.updateProfile({
                 displayName: nameBox.value,
-                photoURL: finalPhotoUrl
+                photoURL: photoUrl
             });
 
-            msg.style.color = "green";
-            msg.innerText = "വിജയകരമായി സേവ് ചെയ്തു!";
+            msg.style.color = "green"; msg.innerText = "വിജയകരമായി സേവ് ചെയ്തു!";
             setTimeout(() => location.reload(), 1000);
-
         } catch (e) {
-            msg.style.color = "red";
-            msg.innerText = "Error: സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.";
+            msg.style.color = "red"; msg.innerText = "പിശക്!";
             saveBtn.disabled = false;
         }
     };

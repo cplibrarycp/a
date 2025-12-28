@@ -1,167 +1,140 @@
-/* Project Logic - Thripudi Master Template Scripts
-   Final Fix for Video Login Issue, Exit Button, Single Audio Player & Video Masking
-*/
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>ക്രമീകരണങ്ങൾ | THRIPUDI LIBRARY</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <style>
+        .profile-section { padding: 40px 0; flex: 1; }
+        .profile-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; margin: 0 auto; text-align: center; border: 4px solid var(--outline-color); }
+        .avatar-wrapper { position: relative; width: 110px; height: 110px; margin: 0 auto 20px; cursor: pointer; }
+        .avatar-circle { width: 100%; height: 100%; background: #f0f0f0; border-radius: 50%; border: 4px solid var(--primary-teal); overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+        .upload-hint { position: absolute; bottom: 0; right: 0; background: var(--primary-teal); color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 2px solid white; }
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: 700; color: var(--secondary-dark); font-size: 0.85em; }
+        input, textarea { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; outline: none; font-family: inherit; }
+        .btn-update { background: var(--primary-teal); color: white; border: none; padding: 12px; border-radius: 8px; width: 100%; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        #fileInput { display: none; }
+    </style>
+</head>
+<body>
 
-const firebaseConfig = { 
-    apiKey: "AIzaSyBzwhpHmeZdLf_nZrcPQirlnpj3Vhg9EqA", 
-    authDomain: "thripudilibrary.firebaseapp.com", 
-    projectId: "thripudilibrary", 
-    storageBucket: "thripudilibrary.firebasestorage.app", 
-    messagingSenderId: "887018912750", 
-    appId: "1:887018912750:web:cc05190a72b13db816acff" 
-};
+<header>
+    <div class="container navbar">
+        <a href="dashboard.html" class="logo-container">
+            <span class="logo-text">THRIPUDI LIBRARY</span>
+            <img src="assets/cover/logo.png" alt="Logo" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <div class="user-profile" id="user-profile-btn">
+                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px;">
+                    <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
+                    <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
-if (typeof firebase !== 'undefined' && !firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
-const auth = (typeof firebase !== 'undefined') ? firebase.auth() : null;
-let currentAudioId = null;
-let bgMusic;
+<section class="profile-section">
+    <div class="container">
+        <div class="profile-card">
+            <div class="avatar-wrapper" onclick="document.getElementById('fileInput').click()">
+                <div class="avatar-circle"><img id="currentPic" src="assets/cover/default_user.jpg"></div>
+                <div class="upload-hint"><i class="fas fa-camera"></i></div>
+                <input type="file" id="fileInput" accept="image/*">
+            </div>
+            <h2 style="color: var(--secondary-dark); margin-bottom: 20px;">പ്രൊഫൈൽ ക്രമീകരണങ്ങൾ</h2>
+            <div class="form-group"><label>ഇമെയിൽ</label><input type="text" id="emailBox" disabled></div>
+            <div class="form-group"><label>പേര്</label><input type="text" id="nameBox"></div>
+            <div class="form-group"><label>വയസ്സ്</label><input type="number" id="ageBox"></div>
+            <div class="form-group"><label>ഫോൺ</label><input type="tel" id="phoneBox"></div>
+            <div class="form-group"><label>അഡ്രസ്സ്</label><textarea id="addressBox" rows="2"></textarea></div>
+            <button class="btn-update" id="saveBtn">വിവരങ്ങൾ സേവ് ചെയ്യുക</button>
+            <div id="msg" style="margin-top:15px; font-size:0.85em; font-weight:600;"></div>
+        </div>
+    </div>
+</section>
 
-function injectMusicSystem() {
-    if (document.getElementById('bgMusic')) return;
-    const audioHTML = `<audio id="bgMusic" loop preload="auto"><source src="assets/cover/bg.mp3" type="audio/mpeg"></audio>`;
-    document.body.insertAdjacentHTML('afterbegin', audioHTML);
-    bgMusic = document.getElementById("bgMusic");
-    if (bgMusic) bgMusic.volume = 0.2;
+<script src="assets/scripts.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
-    const navSearch = setInterval(() => {
-        const userProfileBtn = document.getElementById('user-profile-btn');
-        const navItems = document.querySelectorAll('.nav-item, .nav-btn');
-        const navbar = document.querySelector('.navbar');
-        
-        let homeBtn = Array.from(navItems).find(item => 
-            item.innerText.trim() === 'Home' || 
-            item.getAttribute('href') === 'dashboard.html'
-        );
+<script>
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwone2MeuhMzyFXTYFKHW0OOherDw4wo517f7daK1bs6VxV7A2XvQkpRaKVBO4_FHSjGw/exec";
 
-        if (homeBtn && !document.getElementById('music-nav-item')) {
-            const musicBtnHTML = `<a class="nav-item" id="music-nav-item" href="javascript:void(0)" onclick="toggleBGMusic()" style="font-weight:bold; color:#004D40; cursor:pointer; display:inline-flex; align-items:center; gap:5px; margin-right:10px;"><i id="music-icon" class="fas fa-volume-mute"></i> Music</a>`;
-            homeBtn.insertAdjacentHTML('beforebegin', musicBtnHTML);
-        }
+    const nameBox = document.getElementById('nameBox'), ageBox = document.getElementById('ageBox'), phoneBox = document.getElementById('phoneBox'), addressBox = document.getElementById('addressBox'), currentPic = document.getElementById('currentPic'), userAvatarImg = document.getElementById('user-avatar-img'), dName = document.getElementById('display-name'), msg = document.getElementById('msg'), saveBtn = document.getElementById('saveBtn');
 
-        if (userProfileBtn && !document.getElementById('exit-header-btn') && (window.AppInventor || /Android/i.test(navigator.userAgent))) {
-            const exitBtnHTML = `<i id="exit-header-btn" class="fa fa-power-off" style="font-size: 1.3rem; margin-left: 15px; cursor: pointer; color: #ff4444; vertical-align: middle; display: inline-block;" onclick="window.forceExit()"></i>`;
-            userProfileBtn.insertAdjacentHTML('afterend', exitBtnHTML);
-            const navLinks = userProfileBtn.closest('.nav-links') || userProfileBtn.parentElement;
-            if (navLinks) {
-                navLinks.style.marginLeft = "auto";
-                navLinks.style.display = "flex";
-                navLinks.style.alignItems = "center";
-                navLinks.style.justifyContent = "flex-end";
-            }
-            if (navbar) {
-                navbar.style.display = "flex";
-                navbar.style.justifyContent = "space-between";
-                navbar.style.alignItems = "center";
-            }
-        }
-        if (document.getElementById('music-nav-item') && document.getElementById('exit-header-btn')) {
-            clearInterval(navSearch);
-        }
-    }, 500);
-}
+    let fileData = null;
 
-window.toggleBGMusic = function() {
-    const icon = document.getElementById("music-icon");
-    if (!bgMusic) bgMusic = document.getElementById("bgMusic");
-    if (bgMusic.paused) {
-        bgMusic.play().then(() => { if(icon) icon.className = "fas fa-volume-up"; });
-    } else {
-        bgMusic.pause();
-        if(icon) icon.className = "fas fa-volume-mute";
-    }
-};
+    auth.onAuthStateChanged((user) => {
+        if (user) {
+            document.getElementById('emailBox').value = user.email;
+            nameBox.value = user.displayName || "";
+            // ഹെഡറിലെ ഡാറ്റ scripts.js മാറ്റിക്കോളും, നമ്മൾ പ്രൊഫൈൽ കാർഡിലെ മാത്രം മാറ്റുന്നു
+            currentPic.src = user.photoURL || 'assets/cover/default_user.jpg';
 
-document.addEventListener('DOMContentLoaded', () => {
-    injectMusicSystem();
-    const userAvatarImg = document.getElementById('user-avatar-img');
-    const dName = document.getElementById('display-name');
-    if (auth) {
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                if(dName) dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
-                if(userAvatarImg) userAvatarImg.src = user.photoURL || 'assets/cover/default_user.jpg';
-                const path = window.location.pathname;
-                const isLoginPage = path.endsWith('login.html') || path.endsWith('index.html') || path === '/' || path.split('/').pop() === '';
-                if (isLoginPage) {
-                    setTimeout(() => {
-                        const returnUrl = localStorage.getItem('return_to');
-                        if (returnUrl && !returnUrl.includes('login.html')) {
-                            localStorage.removeItem('return_to');
-                            window.location.href = returnUrl;
-                        }
-                    }, 800);
+            // ഷീറ്റിൽ നിന്ന് ഡാറ്റ ലോഡ് ചെയ്യുന്നു
+            fetch(`${SCRIPT_URL}?email=${user.email}`).then(r => r.json()).then(res => {
+                if(res.result === "Success") {
+                    ageBox.value = res.data.age || ""; phoneBox.value = res.data.phone || ""; addressBox.value = res.data.address || "";
                 }
-            } else {
-                if(dName) dName.innerText = "അതിഥി";
-                if(userAvatarImg) userAvatarImg.src = 'assets/cover/default_user.jpg';
-            }
-        });
-    }
-    const profileBtn = document.getElementById('user-profile-btn');
-    const dropdown = document.getElementById('profile-dropdown');
-    if (profileBtn) {
-        profileBtn.onclick = (e) => {
-            e.stopPropagation();
-            if(dropdown) dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+            });
+        }
+    });
+
+    document.getElementById('fileInput').onchange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            currentPic.src = ev.target.result;
+            fileData = { base64: ev.target.result.split(',')[1], type: file.type, name: file.name };
         };
-    }
-    window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
-});
+        reader.readAsDataURL(file);
+    };
 
-window.checkAccess = function(id, type, cardId) {
-    if (!auth || !auth.currentUser) {
-        localStorage.setItem('return_to', window.location.href);
-        const modal = document.getElementById('loginAlertModal');
-        if(modal) modal.style.setProperty('display', 'flex', 'important');
-        return;
-    }
+    saveBtn.onclick = async () => {
+        const user = auth.currentUser; if (!user) return;
+        saveBtn.disabled = true; msg.innerText = "വിവരങ്ങൾ പുതുക്കുന്നു...";
 
-    const cardElement = document.getElementById(cardId);
-    const bName = (cardElement.querySelector('.book-title, h6')).innerText;
-    const bThumb = (cardElement.querySelector('.book-cover, img')).src;
-    const uid = auth.currentUser.uid;
+        try {
+            let finalPhotoUrl = user.photoURL;
 
-    let history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
-    history = history.filter(item => item.id !== id);
-    history.push({ id, name: bName, thumb: bThumb, date: new Date().toLocaleDateString('ml-IN') });
-    localStorage.setItem('thripudi_history_' + uid, JSON.stringify(history.slice(-20)));
+            // 1. ഫോട്ടോ അപ്‌ലോഡ് (പഴയ കോഡിലെ അതേ ലോജിക്)
+            if (fileData) {
+                const p = new URLSearchParams();
+                p.append('fileData', fileData.base64);
+                p.append('mimeType', fileData.type);
+                p.append('fileName', fileData.name);
+                
+                const r = await fetch(SCRIPT_URL, { method: 'POST', body: p });
+                const j = await r.json();
+                if (j.result === "Success") finalPhotoUrl = j.url;
+            }
 
-    if(type !== 'pdf' && bgMusic) bgMusic.pause();
+            // 2. ഫയർബേസ് അപ്‌ഡേറ്റ് (താങ്കൾ പറഞ്ഞ ആ മാജിക്)
+            await user.updateProfile({
+                displayName: nameBox.value,
+                photoURL: finalPhotoUrl
+            });
 
-    if (type === 'audio') {
-        document.querySelectorAll('.audio-player-box').forEach(box => box.innerHTML = "");
-        document.querySelectorAll('.book-card').forEach(card => card.classList.remove('audio-active'));
-        document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:80px;height:50px;position:absolute;z-index:9;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>`;
-        document.getElementById(cardId).classList.add('audio-active');
-    } else if (type === 'video') {
-        window.history.pushState({modalOpen: "video"}, ""); 
-        // വീഡിയോ പ്ലെയർ ലോഗിൻ പ്രശ്നം പരിഹരിക്കാൻ ?rm=minimal ഒഴിവാക്കി
-        document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1001; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><div class="player-mask" style="width:60px; height:60px; position:absolute; right:0; top:0; z-index:1000;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
-        document.getElementById('videoOverlay').style.display = 'flex';
-    } else if (type === 'pdf') {
-        window.history.pushState({modalOpen: "pdf"}, "");
-        document.getElementById('pdfFrame').src = `https://drive.google.com/file/d/${id}/preview?rm=minimal`;
-        document.getElementById('pdfModal').style.display = 'flex';
-    }
-};
+            // 3. വിവരങ്ങൾ ഷീറ്റിലേക്ക് (ഇത് ഒരു വശത്ത് നടക്കട്ടെ, ഫോട്ടോയെ ബാധിക്കില്ല)
+            const s = new URLSearchParams();
+            s.append('action', 'saveProfile'); s.append('email', user.email); s.append('name', nameBox.value); s.append('age', ageBox.value); s.append('phone', phoneBox.value); s.append('address', addressBox.value);
+            fetch(SCRIPT_URL, { method: 'POST', body: s });
 
-function confirmAppExit() {
-    if (window.AppInventor) { window.AppInventor.setWebViewString("close"); }
-    else { document.getElementById('exitModal').style.display = 'none'; }
-}
+            msg.style.color = "green"; msg.innerText = "വിജയകരമായി സേവ് ചെയ്തു!";
+            setTimeout(() => { location.reload(); }, 1200);
 
-window.forceExit = function() {
-    if (!document.getElementById('exitModal')) {
-        const modalHTML = `<div id="exitModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); z-index:200000; justify-content:center; align-items:center;"><div style="background:white; width:85%; max-width:320px; border-radius:15px; overflow:hidden; text-align:center;"><div style="background:#004D40; padding:15px; color:white;"><img src="assets/cover/logo.png" style="width:30px; margin-right:10px; vertical-align:middle;"><b>THRIPUDI</b></div><div style="padding:20px; color:black; font-weight:bold;">പുറത്ത് കടക്കണോ?</div><div style="display:flex; border-top:1px solid #eee;"><button onclick="document.getElementById('exitModal').style.display='none'" style="flex:1; padding:15px; border:none; background:none; cursor:pointer;">അല്ല</button><button onclick="confirmAppExit()" style="flex:1; padding:15px; border:none; background:none; color:#ff4444; font-weight:bold; cursor:pointer;">അതെ</button></div></div></div>`;
-        document.body.insertAdjacentHTML('beforeend', modalHTML);
-    }
-    document.getElementById('exitModal').style.display = 'flex';
-};
-
-window.logoutUser = () => { if(auth) auth.signOut().then(() => { window.location.href = "logout_success.html"; }); };
-window.closeLoginPopup = () => { document.getElementById('loginAlertModal').style.display = 'none'; };
-window.closeVideo = () => { document.getElementById('videoOverlay').style.display = 'none'; document.getElementById('videoFrameContainer').innerHTML = ""; };
-window.closePdfModal = () => { document.getElementById('pdfModal').style.display = 'none'; document.getElementById('pdfFrame').src = ""; };
-window.onpopstate = function() { window.closeVideo(); window.closePdfModal(); };
+        } catch (e) {
+            msg.style.color = "red"; msg.innerText = "Error!";
+            saveBtn.disabled = false;
+        }
+    };
+</script>
+</body>
+</html>

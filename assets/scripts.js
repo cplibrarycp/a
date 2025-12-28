@@ -1,5 +1,5 @@
 /* Project Logic - Thripudi Master Template Scripts
-   Final Fix for Exit Button Alignment
+   Final universal fix for Exit Button alignment across all pages
 */
 
 const firebaseConfig = { 
@@ -11,6 +11,7 @@ const firebaseConfig = {
     appId: "1:887018912750:web:cc05190a72b13db816acff" 
 };
 
+// Firebase 8 Initialize
 if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -18,6 +19,7 @@ const auth = (typeof firebase !== 'undefined') ? firebase.auth() : null;
 let currentAudioId = null;
 let bgMusic;
 
+// 1. മ്യൂസിക് സിസ്റ്റം & ഹെഡർ ടൂൾസ്
 function injectMusicSystem() {
     if (document.getElementById('bgMusic')) return;
     const audioHTML = `<audio id="bgMusic" loop preload="auto"><source src="assets/cover/bg.mp3" type="audio/mpeg"></audio>`;
@@ -26,10 +28,11 @@ function injectMusicSystem() {
     if (bgMusic) bgMusic.volume = 0.2;
 
     const navSearch = setInterval(() => {
-        // എക്സിറ്റ് ബട്ടൺ ചേർക്കാൻ യൂസർ പ്രൊഫൈൽ ബട്ടൺ മാത്രം നോക്കുന്നു
         const userProfileBtn = document.getElementById('user-profile-btn');
         const navItems = document.querySelectorAll('.nav-item, .nav-btn');
+        const navbar = document.querySelector('.navbar');
         
+        // Home ബട്ടൺ കണ്ടെത്തുന്നു
         let homeBtn = Array.from(navItems).find(item => 
             item.innerText.trim() === 'Home' || 
             item.getAttribute('href') === 'dashboard.html'
@@ -40,32 +43,29 @@ function injectMusicSystem() {
             homeBtn.insertAdjacentHTML('beforebegin', musicBtnHTML);
         }
 
-        // എക്സിറ്റ് ബട്ടൺ ലോജിക് - കൂടുതൽ കൃത്യതയോടെ
+        // എക്സിറ്റ് ബട്ടൺ ലോജിക് - കണിശമായി യൂസർ പ്രൊഫൈലിന് അടുത്ത്
         if (userProfileBtn && !document.getElementById('exit-header-btn') && (window.AppInventor || /Android/i.test(navigator.userAgent))) {
+            const exitBtnHTML = `<i id="exit-header-btn" class="fa fa-power-off" style="font-size: 1.3rem; margin-left: 15px; cursor: pointer; color: #ff4444; vertical-align: middle; display: inline-block;" onclick="window.forceExit()"></i>`;
             
-            // ബട്ടൺ നിർമ്മിക്കുന്നു
-            const exitBtn = document.createElement('i');
-            exitBtn.id = 'exit-header-btn';
-            exitBtn.className = 'fa fa-power-off';
-            exitBtn.style.cssText = "font-size: 1.3rem; margin-left: 15px; cursor: pointer; color: #ff4444; vertical-align: middle; display: inline-block;";
-            exitBtn.onclick = function() { window.forceExit(); };
-            
-            // യൂസർ പ്രൊഫൈലിന് തൊട്ടടുത്ത് തന്നെ ചേർക്കുന്നു
-            userProfileBtn.parentNode.insertBefore(exitBtn, userProfileBtn.nextSibling);
+            // 1. ബട്ടൺ ചേർക്കുന്നു
+            userProfileBtn.insertAdjacentHTML('afterend', exitBtnHTML);
 
-            // അലൈൻമെന്റ് ഫിക്സ്: പാരന്റ് കണ്ടെയ്‌നറിനെ വലതുവശത്തേക്ക് ഒതുക്കുന്നു
-            const headerContainer = userProfileBtn.closest('.navbar') || userProfileBtn.parentElement;
-            if (headerContainer) {
-                headerContainer.style.display = "flex";
-                headerContainer.style.alignItems = "center";
-                // ലോഗോയും ഐക്കണുകളും രണ്ട് അറ്റങ്ങളിലായി നിൽക്കാൻ
-                headerContainer.style.justifyContent = "space-between"; 
+            // 2. അലൈൻമെന്റ് ഫിക്സ് (കാറ്റഗറി പേജുകൾക്കായി)
+            // പ്രൊഫൈൽ ബട്ടൺ ഇരിക്കുന്ന ഗ്രൂപ്പിനെ മൊത്തമായി വലതുവശത്തേക്ക് നീക്കുന്നു
+            const navLinks = userProfileBtn.closest('.nav-links') || userProfileBtn.parentElement;
+            if (navLinks) {
+                navLinks.style.marginLeft = "auto";
+                navLinks.style.display = "flex";
+                navLinks.style.alignItems = "center";
+                navLinks.style.justifyContent = "flex-end";
             }
-            
-            // ഐക്കണുകൾ ഇരിക്കുന്ന ഗ്രൂപ്പിനെ വലതുവശത്തേക്ക് നീക്കുന്നു
-            userProfileBtn.parentElement.style.marginLeft = "auto";
-            userProfileBtn.parentElement.style.display = "flex";
-            userProfileBtn.parentElement.style.alignItems = "center";
+
+            // 3. മെയിൻ ബാറിലെ സ്പേസിംഗ് ഉറപ്പാക്കുന്നു
+            if (navbar) {
+                navbar.style.display = "flex";
+                navbar.style.justifyContent = "space-between";
+                navbar.style.alignItems = "center";
+            }
         }
 
         if (document.getElementById('music-nav-item') && document.getElementById('exit-header-btn')) {
@@ -85,6 +85,7 @@ window.toggleBGMusic = function() {
     }
 };
 
+// 2. യൂസർ സ്റ്റേറ്റ് & റീഡയറക്ട്
 document.addEventListener('DOMContentLoaded', () => {
     injectMusicSystem();
     const userAvatarImg = document.getElementById('user-avatar-img');
@@ -126,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
 });
 
+// 3. ആക്സസ് & ഹിസ്റ്ററി
 window.checkAccess = function(id, type, cardId) {
     if (!auth || !auth.currentUser) {
         localStorage.setItem('return_to', window.location.href);
@@ -160,6 +162,7 @@ window.checkAccess = function(id, type, cardId) {
     }
 };
 
+// 4. എക്സിറ്റ് ലോജിക്
 function confirmAppExit() {
     if (window.AppInventor) { window.AppInventor.setWebViewString("close"); }
     else { document.getElementById('exitModal').style.display = 'none'; }

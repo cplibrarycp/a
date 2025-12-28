@@ -1,5 +1,5 @@
 /* Project Logic - Thripudi Master Template Scripts
-   Final universal fix for Exit Button alignment & Single Audio Player Logic
+   Universal fix for Exit Button, Single Audio Player & Video Masking
 */
 
 const firebaseConfig = { 
@@ -11,7 +11,6 @@ const firebaseConfig = {
     appId: "1:887018912750:web:cc05190a72b13db816acff" 
 };
 
-// Firebase 8 Initialize
 if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -19,7 +18,6 @@ const auth = (typeof firebase !== 'undefined') ? firebase.auth() : null;
 let currentAudioId = null;
 let bgMusic;
 
-// 1. മ്യൂസിക് സിസ്റ്റം & ഹെഡർ ടൂൾസ്
 function injectMusicSystem() {
     if (document.getElementById('bgMusic')) return;
     const audioHTML = `<audio id="bgMusic" loop preload="auto"><source src="assets/cover/bg.mp3" type="audio/mpeg"></audio>`;
@@ -75,7 +73,6 @@ window.toggleBGMusic = function() {
     }
 };
 
-// 2. യൂസർ സ്റ്റേറ്റ് & റീഡയറക്ട്
 document.addEventListener('DOMContentLoaded', () => {
     injectMusicSystem();
     const userAvatarImg = document.getElementById('user-avatar-img');
@@ -113,7 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
 });
 
-// 3. ആക്സസ് & ഹിസ്റ്ററി (Single Audio Player Logic Included)
 window.checkAccess = function(id, type, cardId) {
     if (!auth || !auth.currentUser) {
         localStorage.setItem('return_to', window.location.href);
@@ -135,16 +131,14 @@ window.checkAccess = function(id, type, cardId) {
     if(type !== 'pdf' && bgMusic) bgMusic.pause();
 
     if (type === 'audio') {
-        // പഴയ പ്ലെയറുകൾ ഉണ്ടെങ്കിൽ അവ നീക്കം ചെയ്യുന്നു (Single Player Mode)
         document.querySelectorAll('.audio-player-box').forEach(box => box.innerHTML = "");
         document.querySelectorAll('.book-card').forEach(card => card.classList.remove('audio-active'));
-        
-        // പുതിയ പ്ലെയർ ലോഡ് ചെയ്യുന്നു
         document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:80px;height:50px;position:absolute;z-index:9;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>`;
         document.getElementById(cardId).classList.add('audio-active');
     } else if (type === 'video') {
         window.history.pushState({modalOpen: "video"}, ""); 
-        document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1000; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
+        // വീഡിയോ മാസ്കിംഗ് തിരികെ ചേർത്തു
+        document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1001; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><div class="player-mask" style="width:60px; height:60px; position:absolute; right:0; top:0; z-index:1000;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
         document.getElementById('videoOverlay').style.display = 'flex';
     } else if (type === 'pdf') {
         window.history.pushState({modalOpen: "pdf"}, "");
@@ -153,7 +147,6 @@ window.checkAccess = function(id, type, cardId) {
     }
 };
 
-// 4. എക്സിറ്റ് ലോജിക്
 function confirmAppExit() {
     if (window.AppInventor) { window.AppInventor.setWebViewString("close"); }
     else { document.getElementById('exitModal').style.display = 'none'; }

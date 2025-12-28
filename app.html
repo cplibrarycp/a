@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <title>Thripudi App Download</title>
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+  <link href="css/font-awesome.min.css" rel="stylesheet" />
+  <style>
+    body { 
+      background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('assets/cover/mobile.jpg');
+      background-size: cover; background-position: center; background-attachment: fixed;
+      color: white; font-family: 'Poppins', sans-serif; 
+      display: flex; justify-content: center; align-items: center; 
+      min-height: 100vh; margin: 0; padding: 10px; 
+    }
+    .phone-mockup {
+      width: 290px; height: 530px; background: #000; border: 8px solid #333; border-radius: 35px;
+      position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.8); overflow: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .phone-screen {
+      width: 100%; height: 100%; background: #004d40; 
+      display: flex; flex-direction: column; 
+      align-items: center; justify-content: center; /* ഇതിലൂടെ മാറ്റർ നടുവിലാകും */
+      padding: 20px; text-align: center; box-sizing: border-box;
+    }
+    .app-logo { width: 65px; height: auto; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.4)); }
+    h2 { color: #ffbe33; font-weight: bold; font-size: 1.3rem; margin: 0 0 5px 0; }
+    .tagline { font-size: 0.8rem; opacity: 0.9; margin-bottom: 20px; color: #eee; }
+
+    .download-btn {
+      background: #ffbe33; color: #000 !important; width: 100%; max-width: 220px; padding: 10px; border-radius: 25px;
+      font-weight: bold; text-decoration: none !important; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.9rem;
+      box-shadow: 0 4px 12px rgba(255,190,51,0.4); margin-bottom: 20px;
+    }
+
+    .instruction-container { width: 100%; text-align: left; }
+    .instruction-title { color: #ffbe33; font-size: 0.85rem; font-weight: bold; margin-bottom: 8px; border-bottom: 1px solid rgba(255, 190, 51, 0.3); padding-bottom: 3px; display: inline-block; }
+    .step-box { background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px; margin-bottom: 6px; font-size: 0.72rem; line-height: 1.3; border-left: 3px solid #ffbe33; width: 100%; box-sizing: border-box; }
+    .step-box b { color: #ffbe33; }
+    
+    .back-link { position: absolute; bottom: 20px; color: #ffbe33; text-decoration: none; font-size: 0.8rem; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <div class="phone-mockup">
+    <div style="position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 18px; background: #333; border-bottom-left-radius: 12px; border-bottom-right-radius: 12px; z-index: 10;"></div>
+    
+    <div class="phone-screen">
+      <img src="assets/cover/logo.png" class="app-logo" alt="Logo">
+      <h2>Thripudi Library</h2>
+      <p class="tagline">വായനയുടെ പുതിയ ലോകം</p>
+
+      <a href="https://github.com/cplibrarycp/app/raw/main/Thripudi%20Library.apk" class="download-btn">
+        <i class="fa fa-android"></i> Download APK
+      </a>
+
+      <div class="instruction-container">
+        <div class="instruction-title">ഇൻസ്റ്റാൾ ചെയ്യാൻ:</div>
+        
+        <div class="step-box">
+          <b>ഘട്ടം 1:</b> ആപ്പ് തുറന്ന് <b>Unknown Sources</b> പെർമിഷൻ ചോദിച്ചാൽ <b>"Allow"</b> ചെയ്യുക.
+        </div>
+        
+        <div class="step-box">
+          <b>ഘട്ടം 2:</b> Play Protect വാണിംഗ് വന്നാൽ <b>"More details"</b> അമർത്തി <b>"Install anyway"</b> നൽകുക.
+        </div>
+
+        <div class="step-box">
+          <b>ഘട്ടം 3:</b> സ്കാനിംഗ് പെർമിഷൻ ചോദിച്ചാൽ <b>"Allow"</b> നൽകി പൂർത്തിയാക്കുക.
+        </div>
+      </div>
+      
+      <a href="index.html" class="back-link">← ഹോം പേജിലേക്ക്</a>
+    </div>
+
+    <div style="position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background: #444; border-radius: 10px;"></div>
+  </div>
+
+</body>
+</html>

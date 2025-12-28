@@ -10,32 +10,56 @@
     <link rel="stylesheet" href="assets/styles.css">
     
     <style>
-        .contact-section { padding: 40px 0; flex: 1; }
+        body {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('assets/cover/mobile.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-section { 
+            padding: 40px 15px; 
+            flex: 1; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+        }
+
         .contact-card { 
-            background: white; padding: 40px; border-radius: 20px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08); display: flex; 
-            flex-wrap: wrap; gap: 40px; border: 4px solid var(--outline-color); 
+            background: #fff; 
+            border-radius: 20px; 
+            box-shadow: 0 20px 50px rgba(0,0,0,0.4); 
+            display: flex; 
+            flex-direction: column;
+            overflow: hidden; 
+            max-width: 420px; 
+            width: 100%;
         }
-        .contact-left { flex: 1; min-width: 300px; text-align: center; }
-        .contact-right { flex: 1; min-width: 300px; text-align: left; }
-        .contact-thumb { width: 100%; max-width: 400px; border-radius: 12px; border: 4px solid var(--outline-color); margin-bottom: 20px; }
-        
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 700; color: var(--secondary-dark); }
-        .form-control { width: 100%; padding: 12px; border: 2px solid var(--outline-color); border-radius: 8px; font-family: inherit; }
-        .btn-submit { background: var(--primary-teal); color: white; border: none; padding: 14px; border-radius: 50px; width: 100%; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1.1em; }
 
-        /* Modal Logo & Header Style */
-        .msg-popup-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2005; justify-content: center; align-items: center; }
-        .msg-box { background: white; width: 90%; max-width: 350px; border-radius: 15px; overflow: hidden; text-align: center; border: 2px solid var(--secondary-dark); padding: 25px; }
-        .modal-logo { width: 60px; height: auto; margin-bottom: 10px; }
-        .modal-header-text { color: var(--secondary-dark); font-weight: 700; font-size: 1.1em; display: block; }
-        .msg-body { padding: 20px 0; color: var(--text-color); font-weight: 500; }
-
-        @media (max-width: 768px) {
-            .contact-card { padding: 25px; gap: 20px; }
-            .contact-left, .contact-right { min-width: 100%; }
+        .card-green-header {
+            background: linear-gradient(135deg, #00695C, #004D40);
+            padding: 20px;
+            text-align: center;
+            color: white;
         }
+
+        .header-logo { width: 50px; height: auto; margin-bottom: 8px; }
+        .header-title { font-size: 1.2rem; font-weight: 700; display: block; }
+
+        .contact-body { padding: 25px; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; font-size: 0.85em; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; font-size: 0.9em; box-sizing: border-box; }
+
+        .btn-submit { background: #00897B; color: white; border: none; padding: 12px; border-radius: 10px; width: 100%; font-weight: 700; cursor: pointer; transition: 0.3s; font-size: 1em; }
+
+        .msg-popup-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center; }
+        .msg-box { background: white; width: 90%; max-width: 350px; border-radius: 15px; overflow: hidden; text-align: center; border: 2px solid #004D40; padding: 25px; }
+        .modal-logo { width: 50px; height: auto; margin-bottom: 10px; }
+        .modal-header-text { color: #004D40; font-weight: 700; font-size: 1.1em; display: block; }
     </style>
 </head>
 <body>
@@ -50,50 +74,46 @@
             <a class="nav-item" href="dashboard.html">Home</a>
             <a class="nav-item" href="collection.html">ശേഖരം</a>
             <a class="nav-item" href="about.html">About</a>
+            <a class="nav-item" href="contact.html">Contact</a>
             
-            <div class="user-profile" id="user-profile-btn">
-                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
+            <div class="user-profile" id="user-profile-btn" style="display: none;">
+                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small">
                     <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
                 </div>
                 <div class="profile-dropdown" id="profile-dropdown">
-                    <a href="settings.html"><i class="fas fa-cog"></i> Settings</a>
-                    <a href="history.html"><i class="fas fa-history"></i> History</a>
-                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="history.html">History</a>
+                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;">Logout</a>
                 </div>
             </div>
+            <a id="nav-login-btn" class="nav-item" href="login.html" style="display: none;">Login</a>
         </div>
     </div>
 </header>
 
 <section class="contact-section">
-    <div class="container">
-        <h1 style="text-align: center; color: var(--secondary-dark); margin-bottom: 30px;">ഞങ്ങളെ ബന്ധപ്പെടുക</h1>
-        <div class="contact-card">
-            <div class="contact-left">
-                <img alt="Thripudi" class="contact-thumb" src="assets/cover/logo.png"/>
-                <div style="color: #555; margin-top: 15px;">
-                    <p style="margin-bottom: 10px;"><i class="fas fa-envelope" style="color: var(--primary-teal);"></i> cplibrarycp@gmail.com</p>
-                    <p><i class="fas fa-map-marker-alt" style="color: var(--primary-teal);"></i> Kerala, India</p>
+    <div class="contact-card">
+        <div class="card-green-header">
+            <img src="assets/cover/logo.png" class="header-logo" alt="Logo">
+            <span class="header-title">ത്രിപുടി ലൈബ്രറി</span>
+        </div>
+        <div class="contact-body">
+            <form id="contactForm">
+                <div class="form-group">
+                    <label>പേര്</label>
+                    <input class="form-control" id="name" name="name" placeholder="നിങ്ങളുടെ പേര്" required type="text"/>
                 </div>
-            </div>
-            <div class="contact-right">
-                <form id="contactForm">
-                    <div class="form-group">
-                        <label>പേര്</label>
-                        <input class="form-control" id="name" name="name" placeholder="നിങ്ങളുടെ പേര്" required type="text"/>
-                    </div>
-                    <div class="form-group">
-                        <label>ഇമെയിൽ</label>
-                        <input class="form-control" id="email" name="email" placeholder="example@gmail.com" required type="email"/>
-                    </div>
-                    <div class="form-group">
-                        <label>സന്ദേശം</label>
-                        <textarea class="form-control" id="message" name="message" placeholder="നിങ്ങളുടെ അഭിപ്രായങ്ങൾ..." required rows="4"></textarea>
-                    </div>
-                    <button class="btn-submit" id="submitBtn" type="submit">സന്ദേശം അയക്കൂ <i class="fas fa-paper-plane"></i></button>
-                </form>
-            </div>
+                <div class="form-group">
+                    <label>ഇമെയിൽ</label>
+                    <input class="form-control" id="email" name="email" placeholder="നിങ്ങളുടെ ഇമെയിൽ" required type="email"/>
+                </div>
+                <div class="form-group">
+                    <label>സന്ദേശം</label>
+                    <textarea class="form-control" id="message" name="message" placeholder="സന്ദേശം ഇവിടെ എഴുതുക..." required rows="4" style="resize: none;"></textarea>
+                </div>
+                <button class="btn-submit" id="submitBtn" type="submit">സന്ദേശം അയക്കൂ <i class="fas fa-paper-plane"></i></button>
+            </form>
         </div>
     </div>
 </section>
@@ -103,10 +123,8 @@
         <img src="assets/cover/logo.png" alt="Logo" class="modal-logo">
         <span class="modal-header-text">THRIPUDI LIBRARY</span>
         <hr style="opacity: 0.2; margin: 10px 0;">
-        <div class="msg-body" id="statusMsg"></div>
-        <div style="margin-top: 10px;">
-            <button onclick="closeStatusModal()" class="overlay-btn" style="padding: 10px 30px; width: 100%;">ശരി</button>
-        </div>
+        <div id="statusMsg" style="font-weight: 500; padding: 10px 0;"></div>
+        <button onclick="closeStatusModal()" class="btn-submit" style="margin-top: 15px;">ശരി</button>
     </div>
 </div>
 
@@ -114,7 +132,7 @@
     <div class="container footer-content">
         <div class="footer-line-one">
             <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
-            <a href="https://wa.me/919447333333" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
             <span class="footer-divider">|</span>
             <a href="privacy.html">സ്വകാര്യതാ നയം</a>
             <span class="footer-divider">|</span>
@@ -124,7 +142,6 @@
     </div>
 </footer>
 
-<script src="assets/scripts.js"></script>
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
     import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
@@ -133,53 +150,63 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
+    const userProfileBtn = document.getElementById('user-profile-btn');
+    const navLoginBtn = document.getElementById('nav-login-btn');
     const userAvatarImg = document.getElementById('user-avatar-img');
     const dName = document.getElementById('display-name');
-    const defaultUserImg = 'assets/cover/default_user.jpg';
+    const dropdown = document.getElementById('profile-dropdown');
+
+    let currentUser = null;
 
     onAuthStateChanged(auth, (user) => {
+        currentUser = user;
         if (user) {
+            userProfileBtn.style.display = 'block';
+            navLoginBtn.style.display = 'none';
             dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്ത്";
-            userAvatarImg.src = user.photoURL ? user.photoURL : defaultUserImg;
+            userAvatarImg.src = user.photoURL || 'assets/cover/default_user.jpg';
         } else {
-            window.location.href = "login.html";
+            userProfileBtn.style.display = 'none';
+            navLoginBtn.style.display = 'block';
         }
     });
 
-    // Logout Function
-    window.logoutUser = () => {
-        signOut(auth).then(() => { window.location.href = "logout_success.html"; });
-    };
+    window.logoutUser = () => { signOut(auth).then(() => { window.location.href = "logout_success.html"; }); };
 
-    // Dropdown Logic
-    const profileBtn = document.getElementById('user-profile-btn');
-    const dropdown = document.getElementById('profile-dropdown');
-    profileBtn.onclick = (e) => {
-        e.stopPropagation();
-        dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
-    };
-    window.onclick = () => { dropdown.style.display = 'none'; };
+    // ഡ്രോപ്പ് ഡൗൺ ലോജിക്
+    if(userProfileBtn) {
+        userProfileBtn.onclick = (e) => {
+            e.stopPropagation();
+            dropdown.style.display = (dropdown.style.display === 'block') ? 'none' : 'block';
+        };
+    }
+    window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
 
-    // Form Submit Logic
     const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzYnb6HKOcIApRNHHUUfV71qrO5Qg9obxtQG4eXFLdZ2gNUL2sNPCnnUI0X6wM5718RiA/exec"; 
 
     document.getElementById('contactForm').addEventListener('submit', function(e) {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
         const statusModal = document.getElementById('statusModal');
         const statusMsg = document.getElementById('statusMsg');
 
-        btn.innerHTML = 'അയക്കുന്നു... <i class="fas fa-spinner fa-spin"></i>';
+        if (!currentUser) {
+            statusMsg.innerHTML = "⚠️ സന്ദേശം അയക്കാൻ ദയവായി ലോഗിൻ ചെയ്യുക.";
+            statusModal.style.display = 'flex';
+            return;
+        }
+
+        const btn = document.getElementById('submitBtn');
+        btn.innerHTML = 'അയക്കുന്നു...';
         btn.disabled = true;
 
         fetch(APPS_SCRIPT_URL, { method: "POST", body: new URLSearchParams(new FormData(this)) })
         .then(res => res.json())
         .then(result => {
             if(result.result === 'Success') {
-                statusMsg.innerHTML = "✅ നിങ്ങളുടെ സന്ദേശം ലഭിച്ചു.<br>നന്ദി!";
+                statusMsg.innerHTML = "✅ നിങ്ങളുടെ സന്ദേശം ലഭിച്ചു. നന്ദി!";
                 this.reset();
             } else {
-                statusMsg.innerText = "❌ അയക്കാൻ കഴിഞ്ഞില്ല. വീണ്ടും ശ്രമിക്കുക.";
+                statusMsg.innerText = "❌ സന്ദേശം അയക്കാൻ കഴിഞ്ഞില്ല.";
             }
             statusModal.style.display = 'flex';
         })

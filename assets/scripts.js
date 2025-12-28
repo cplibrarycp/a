@@ -1,5 +1,5 @@
 /* Project Logic - Thripudi Master Template Scripts
-   Final universal fix for Exit Button alignment across all pages
+   Final universal fix for Exit Button alignment & Single Audio Player Logic
 */
 
 const firebaseConfig = { 
@@ -32,7 +32,6 @@ function injectMusicSystem() {
         const navItems = document.querySelectorAll('.nav-item, .nav-btn');
         const navbar = document.querySelector('.navbar');
         
-        // Home ബട്ടൺ കണ്ടെത്തുന്നു
         let homeBtn = Array.from(navItems).find(item => 
             item.innerText.trim() === 'Home' || 
             item.getAttribute('href') === 'dashboard.html'
@@ -43,15 +42,9 @@ function injectMusicSystem() {
             homeBtn.insertAdjacentHTML('beforebegin', musicBtnHTML);
         }
 
-        // എക്സിറ്റ് ബട്ടൺ ലോജിക് - കണിശമായി യൂസർ പ്രൊഫൈലിന് അടുത്ത്
         if (userProfileBtn && !document.getElementById('exit-header-btn') && (window.AppInventor || /Android/i.test(navigator.userAgent))) {
             const exitBtnHTML = `<i id="exit-header-btn" class="fa fa-power-off" style="font-size: 1.3rem; margin-left: 15px; cursor: pointer; color: #ff4444; vertical-align: middle; display: inline-block;" onclick="window.forceExit()"></i>`;
-            
-            // 1. ബട്ടൺ ചേർക്കുന്നു
             userProfileBtn.insertAdjacentHTML('afterend', exitBtnHTML);
-
-            // 2. അലൈൻമെന്റ് ഫിക്സ് (കാറ്റഗറി പേജുകൾക്കായി)
-            // പ്രൊഫൈൽ ബട്ടൺ ഇരിക്കുന്ന ഗ്രൂപ്പിനെ മൊത്തമായി വലതുവശത്തേക്ക് നീക്കുന്നു
             const navLinks = userProfileBtn.closest('.nav-links') || userProfileBtn.parentElement;
             if (navLinks) {
                 navLinks.style.marginLeft = "auto";
@@ -59,15 +52,12 @@ function injectMusicSystem() {
                 navLinks.style.alignItems = "center";
                 navLinks.style.justifyContent = "flex-end";
             }
-
-            // 3. മെയിൻ ബാറിലെ സ്പേസിംഗ് ഉറപ്പാക്കുന്നു
             if (navbar) {
                 navbar.style.display = "flex";
                 navbar.style.justifyContent = "space-between";
                 navbar.style.alignItems = "center";
             }
         }
-
         if (document.getElementById('music-nav-item') && document.getElementById('exit-header-btn')) {
             clearInterval(navSearch);
         }
@@ -90,16 +80,13 @@ document.addEventListener('DOMContentLoaded', () => {
     injectMusicSystem();
     const userAvatarImg = document.getElementById('user-avatar-img');
     const dName = document.getElementById('display-name');
-
     if (auth) {
         auth.onAuthStateChanged(user => {
             if (user) {
                 if(dName) dName.innerText = user.displayName ? user.displayName.split(' ')[0] : "സുഹൃത്തേ";
                 if(userAvatarImg) userAvatarImg.src = user.photoURL || 'assets/cover/default_user.jpg';
-
                 const path = window.location.pathname;
                 const isLoginPage = path.endsWith('login.html') || path.endsWith('index.html') || path === '/' || path.split('/').pop() === '';
-                
                 if (isLoginPage) {
                     setTimeout(() => {
                         const returnUrl = localStorage.getItem('return_to');
@@ -115,7 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
-
     const profileBtn = document.getElementById('user-profile-btn');
     const dropdown = document.getElementById('profile-dropdown');
     if (profileBtn) {
@@ -127,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
 });
 
-// 3. ആക്സസ് & ഹിസ്റ്ററി
+// 3. ആക്സസ് & ഹിസ്റ്ററി (Single Audio Player Logic Included)
 window.checkAccess = function(id, type, cardId) {
     if (!auth || !auth.currentUser) {
         localStorage.setItem('return_to', window.location.href);
@@ -149,6 +135,11 @@ window.checkAccess = function(id, type, cardId) {
     if(type !== 'pdf' && bgMusic) bgMusic.pause();
 
     if (type === 'audio') {
+        // പഴയ പ്ലെയറുകൾ ഉണ്ടെങ്കിൽ അവ നീക്കം ചെയ്യുന്നു (Single Player Mode)
+        document.querySelectorAll('.audio-player-box').forEach(box => box.innerHTML = "");
+        document.querySelectorAll('.book-card').forEach(card => card.classList.remove('audio-active'));
+        
+        // പുതിയ പ്ലെയർ ലോഡ് ചെയ്യുന്നു
         document.getElementById('player-' + id).innerHTML = `<div class="player-mask" style="width:80px;height:50px;position:absolute;z-index:9;"></div><iframe src="https://drive.google.com/file/d/${id}/preview?rm=minimal" style="width:100%; height:100%; border:none;" scrolling="no"></iframe>`;
         document.getElementById(cardId).classList.add('audio-active');
     } else if (type === 'video') {

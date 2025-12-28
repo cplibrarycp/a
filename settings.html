@@ -246,67 +246,32 @@
         reader.readAsDataURL(file);
     };
 
-    ssaveBtn.onclick = async () => {
+    saveBtn.onclick = async () => {
         const user = auth.currentUser;
         if (!user) return;
 
         saveBtn.disabled = true;
-        msg.innerText = "വിവരങ്ങൾ പുതുക്കുന്നു...";
+        msg.innerText = "പ്രൊഫൈൽ പുതുക്കുന്നു...";
         msg.style.color = "blue";
 
         try {
             let finalPhotoUrl = user.photoURL;
 
-            // 1. ഫോട്ടോ അപ്‌ലോഡ് (ഉണ്ടെങ്കിൽ മാത്രം)
+            // ഫോട്ടോ അപ്‌ലോഡ് ലോജിക് (പഴയതുപോലെ തന്നെ)
             if (fileData) {
-                const photoParams = new URLSearchParams();
-                photoParams.append('action', 'saveProfile'); // Action ഇവിടെയും നൽകുക
-                photoParams.append('fileData', fileData.base64);
-                photoParams.append('mimeType', fileData.type);
-                photoParams.append('fileName', user.uid + "_" + fileData.name);
-                photoParams.append('email', user.email);
+                const formData = new FormData();
+                formData.append('fileData', fileData.base64);
+                formData.append('mimeType', fileData.type);
+                formData.append('fileName', user.uid + "_" + fileData.name);
 
-                const photoRes = await fetch(SCRIPT_URL, { method: 'POST', body: photoParams });
-                const photoResult = await photoRes.json();
-                if (photoResult.result === "Success") {
-                    finalPhotoUrl = photoResult.photoUrl || photoResult.url;
-                }
-            }
-
-            // 2. ബാക്കി വിവരങ്ങൾ ഷീറ്റിലേക്ക് അയക്കുന്നു
-            const sheetParams = new URLSearchParams();
-            sheetParams.append('action', 'saveProfile');
-            sheetParams.append('email', user.email);
-            sheetParams.append('name', nameBox.value);
-            sheetParams.append('age', ageBox.value);
-            sheetParams.append('gender', genderBox.value);
-            sheetParams.append('phone', phoneBox.value);
-            sheetParams.append('whatsapp', whatsappBox.value);
-            sheetParams.append('address', addressBox.value);
-            sheetParams.append('photoUrl', finalPhotoUrl);
-
-            const finalRes = await fetch(SCRIPT_URL, { method: 'POST', body: sheetParams });
-            const finalResult = await finalRes.json();
-
-            if (finalResult.result === "Success") {
-                await updateProfile(user, { 
-                    displayName: nameBox.value,
-                    photoURL: finalPhotoUrl
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: new URLSearchParams(formData)
                 });
-                msg.style.color = "green";
-                msg.innerText = "വിവരങ്ങൾ വിജയകരമായി സേവ് ചെയ്തു!";
-                setTimeout(() => location.reload(), 1000);
-            } else {
-                throw new Error("Sheet API Error");
+                const result = await response.json();
+                if (result.result === "Success") finalPhotoUrl = result.photoUrl || result.url;
             }
 
-        } catch (e) {
-            console.error("Save Error:", e); // എറർ എന്താണെന്ന് Console-ൽ കാണാം
-            msg.style.color = "red";
-            msg.innerText = "Error: വിവരങ്ങൾ സേവ് ചെയ്യാൻ കഴിഞ്ഞില്ല.";
-            saveBtn.disabled = false;
-        }
-    };
             // ഷീറ്റിലേക്ക് വിവരങ്ങൾ അയക്കുന്നു
             const sheetParams = new URLSearchParams();
             sheetParams.append('action', 'saveProfile');
@@ -346,4 +311,3 @@
 </script>
 </body>
 </html>
-

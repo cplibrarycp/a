@@ -30,8 +30,9 @@
             <img src="assets/cover/logo.png" alt="Logo" class="logo-img">
         </a>
         <div class="nav-links">
+            <a class="nav-item" href="dashboard.html">Home</a>
             <div class="user-profile" id="user-profile-btn">
-                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px;">
+                <div class="user-avatar-wrap" style="display: flex; align-items: center; gap: 10px; cursor: pointer;">
                     <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
                     <span style="color: white; font-size: 0.85em;"><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
                 </div>
@@ -46,7 +47,7 @@
             <div class="avatar-wrapper" onclick="document.getElementById('fileInput').click()">
                 <div class="avatar-circle"><img id="currentPic" src="assets/cover/default_user.jpg"></div>
                 <div class="upload-hint"><i class="fas fa-camera"></i></div>
-                <input type="file" id="fileInput" accept="image/*">
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
             </div>
             <h2 style="color: var(--secondary-dark); margin-bottom: 20px;">പ്രൊഫൈൽ ക്രമീകരണങ്ങൾ</h2>
             <div class="form-group"><label>ഇമെയിൽ</label><input type="text" id="emailBox" disabled></div>
@@ -67,7 +68,8 @@
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwone2MeuhMzyFXTYFKHW0OOherDw4wo517f7daK1bs6VxV7A2XvQkpRaKVBO4_FHSjGw/exec";
 
-    const nameBox = document.getElementById('nameBox'), ageBox = document.getElementById('ageBox'), phoneBox = document.getElementById('phoneBox'), addressBox = document.getElementById('addressBox'), currentPic = document.getElementById('currentPic'), userAvatarImg = document.getElementById('user-avatar-img'), dName = document.getElementById('display-name'), msg = document.getElementById('msg'), saveBtn = document.getElementById('saveBtn');
+    // scripts.js-ൽ പവർ ഉപയോഗിച്ച് auth ഇവിടെ ലഭ്യമാണ്
+    const nameBox = document.getElementById('nameBox'), ageBox = document.getElementById('ageBox'), phoneBox = document.getElementById('phoneBox'), addressBox = document.getElementById('addressBox'), currentPic = document.getElementById('currentPic'), msg = document.getElementById('msg'), saveBtn = document.getElementById('saveBtn');
 
     let fileData = null;
 
@@ -75,10 +77,10 @@
         if (user) {
             document.getElementById('emailBox').value = user.email;
             nameBox.value = user.displayName || "";
-            // ഹെഡറിലെ ഡാറ്റ scripts.js മാറ്റിക്കോളും, നമ്മൾ പ്രൊഫൈൽ കാർഡിലെ മാത്രം മാറ്റുന്നു
+            // കാർഡിലെ ഫോട്ടോ ലോഡ് ചെയ്യുന്നു
             currentPic.src = user.photoURL || 'assets/cover/default_user.jpg';
 
-            // ഷീറ്റിൽ നിന്ന് ഡാറ്റ ലോഡ് ചെയ്യുന്നു
+            // ഷീറ്റിൽ നിന്ന് ഡാറ്റ എടുക്കുന്നു
             fetch(`${SCRIPT_URL}?email=${user.email}`).then(r => r.json()).then(res => {
                 if(res.result === "Success") {
                     ageBox.value = res.data.age || ""; phoneBox.value = res.data.phone || ""; addressBox.value = res.data.address || "";
@@ -99,12 +101,12 @@
 
     saveBtn.onclick = async () => {
         const user = auth.currentUser; if (!user) return;
-        saveBtn.disabled = true; msg.innerText = "വിവരങ്ങൾ പുതുക്കുന്നു...";
+        saveBtn.disabled = true; msg.innerText = "വിവരങ്ങൾ പുതുക്കുന്നു..."; msg.style.color = "blue";
 
         try {
-            let finalPhotoUrl = user.photoURL;
+            let photoUrl = user.photoURL;
 
-            // 1. ഫോട്ടോ അപ്‌ലോഡ് (പഴയ കോഡിലെ അതേ ലോജിക്)
+            // 1. ഫോട്ടോ അപ്‌ലോഡ് ലോജിക് (പഴയ മാജിക്)
             if (fileData) {
                 const p = new URLSearchParams();
                 p.append('fileData', fileData.base64);
@@ -113,19 +115,25 @@
                 
                 const r = await fetch(SCRIPT_URL, { method: 'POST', body: p });
                 const j = await r.json();
-                if (j.result === "Success") finalPhotoUrl = j.url;
+                if (j.result === "Success") photoUrl = j.url;
             }
 
-            // 2. ഫയർബേസ് അപ്‌ഡേറ്റ് (താങ്കൾ പറഞ്ഞ ആ മാജിക്)
+            // 2. ഫയർബേസ് അപ്‌ഡേറ്റ്
             await user.updateProfile({
                 displayName: nameBox.value,
-                photoURL: finalPhotoUrl
+                photoURL: photoUrl
             });
 
-            // 3. വിവരങ്ങൾ ഷീറ്റിലേക്ക് (ഇത് ഒരു വശത്ത് നടക്കട്ടെ, ഫോട്ടോയെ ബാധിക്കില്ല)
+            // 3. ബലമായി ഹെഡറിലെ ഫോട്ടോ മാറ്റുന്നു (Force Update)
+            const headerAvatar = document.getElementById('user-avatar-img');
+            const headerName = document.getElementById('display-name');
+            if(headerAvatar) headerAvatar.src = photoUrl;
+            if(headerName) headerName.innerText = nameBox.value.split(' ')[0];
+
+            // 4. ഷീറ്റിലേക്ക് വിവരങ്ങൾ അയക്കുന്നു
             const s = new URLSearchParams();
             s.append('action', 'saveProfile'); s.append('email', user.email); s.append('name', nameBox.value); s.append('age', ageBox.value); s.append('phone', phoneBox.value); s.append('address', addressBox.value);
-            fetch(SCRIPT_URL, { method: 'POST', body: s });
+            await fetch(SCRIPT_URL, { method: 'POST', body: s });
 
             msg.style.color = "green"; msg.innerText = "വിജയകരമായി സേവ് ചെയ്തു!";
             setTimeout(() => { location.reload(); }, 1200);

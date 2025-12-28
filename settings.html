@@ -174,7 +174,7 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzpEHBAdZVq8RmOq6TlsvHk09vLDujZfE1HTxfxvuIVBr-K7yOr4LJYi_nIjKDhP4QiwA/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyC6pxtlaEC0MVkpiYblfgSAjCALQADU8r2Mh5yAbcYsqAWyhngUJ8--I5bcm9_pUt2BQ/exec";
 
     const nameBox = document.getElementById('nameBox');
     const ageBox = document.getElementById('ageBox');
@@ -191,7 +191,6 @@
 
     let fileData = null;
 
-    // ഗൂഗിൾ ഷീറ്റിൽ നിന്ന് വിവരങ്ങൾ എടുക്കുന്ന ഫങ്ക്ഷൻ
     const loadExtraData = async (email) => {
         try {
             const response = await fetch(`${SCRIPT_URL}?email=${email}`);
@@ -220,8 +219,6 @@
             const photo = user.photoURL || 'assets/cover/default_user.jpg';
             currentPic.src = photo;
             userAvatarImg.src = photo;
-            
-            // ഷീറ്റിൽ നിന്ന് വിവരങ്ങൾ ലോഡ് ചെയ്യുന്നു
             loadExtraData(user.email);
         } else { location.href = "login.html"; }
     });
@@ -272,6 +269,7 @@
             formData.append('address', addressBox.value);
             formData.append('photoUrl', user.photoURL || "");
 
+            // പഴയ രീതിയിലുള്ള fileName സെറ്റിംഗ് (user.uid + file.name)
             if (fileData) {
                 formData.append('fileData', fileData.base64);
                 formData.append('mimeType', fileData.type);
@@ -286,19 +284,18 @@
             const result = await response.json();
             
             if (result.result === "Success") {
-                // ഫയർബേസ് അപ്ഡേറ്റ്
+                const newPhotoURL = result.photoUrl || user.photoURL;
                 await updateProfile(user, { 
                     displayName: nameBox.value,
-                    photoURL: result.photoUrl || user.photoURL 
+                    photoURL: newPhotoURL 
                 });
 
                 msg.style.color = "green";
-                msg.innerText = "വിവരങ്ങൾ ഗൂഗിൾ ഷീറ്റിൽ റെക്കോർഡ് ചെയ്തു!";
+                msg.innerText = "വിവരങ്ങൾ ഷീറ്റിൽ റെക്കോർഡ് ചെയ്തു!";
                 setTimeout(() => location.reload(), 1500);
             } else {
-                throw new Error("Sheet save failed");
+                throw new Error("Sheet error");
             }
-
         } catch (e) {
             msg.style.color = "red";
             msg.innerText = "സേവ് ചെയ്യുന്നതിൽ പരാജയപ്പെട്ടു.";
@@ -313,5 +310,4 @@
     window.onclick = () => dropdown.style.display = 'none';
 </script>
 </body>
-
 </html>

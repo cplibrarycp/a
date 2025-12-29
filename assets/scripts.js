@@ -11,6 +11,7 @@ const firebaseConfig = {
     appId: "1:887018912750:web:cc05190a72b13db816acff" 
 };
 
+// Initialize Firebase
 if (typeof firebase !== 'undefined' && !firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
@@ -18,6 +19,7 @@ const auth = (typeof firebase !== 'undefined') ? firebase.auth() : null;
 let currentAudioId = null;
 let bgMusic;
 
+// Inject Background Music and Header Buttons
 function injectMusicSystem() {
     if (document.getElementById('bgMusic')) return;
     const audioHTML = `<audio id="bgMusic" loop preload="auto"><source src="assets/cover/bg.mp3" type="audio/mpeg"></audio>`;
@@ -62,6 +64,7 @@ function injectMusicSystem() {
     }, 500);
 }
 
+// Background Music Toggle
 window.toggleBGMusic = function() {
     const icon = document.getElementById("music-icon");
     if (!bgMusic) bgMusic = document.getElementById("bgMusic");
@@ -73,6 +76,7 @@ window.toggleBGMusic = function() {
     }
 };
 
+// Auth and Profile Dropdown Logic
 document.addEventListener('DOMContentLoaded', () => {
     injectMusicSystem();
     const userAvatarImg = document.getElementById('user-avatar-img');
@@ -110,6 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.onclick = () => { if(dropdown) dropdown.style.display = 'none'; };
 });
 
+// Access and Player Logic
 window.checkAccess = function(id, type, cardId) {
     if (!auth || !auth.currentUser) {
         localStorage.setItem('return_to', window.location.href);
@@ -123,6 +128,7 @@ window.checkAccess = function(id, type, cardId) {
     const bThumb = (cardElement.querySelector('.book-cover, img')).src;
     const uid = auth.currentUser.uid;
 
+    // Update History
     let history = JSON.parse(localStorage.getItem('thripudi_history_' + uid)) || [];
     history = history.filter(item => item.id !== id);
     history.push({ id, name: bName, thumb: bThumb, date: new Date().toLocaleDateString('ml-IN') });
@@ -137,7 +143,6 @@ window.checkAccess = function(id, type, cardId) {
         document.getElementById(cardId).classList.add('audio-active');
     } else if (type === 'video') {
         window.history.pushState({modalOpen: "video"}, ""); 
-        // വീഡിയോ പ്ലെയർ ലോഗിൻ പ്രശ്നം പരിഹരിക്കാൻ ?rm=minimal ഒഴിവാക്കി
         document.getElementById('videoFrameContainer').innerHTML = `<button onclick="window.closeVideo()" style="position:absolute; top:15px; left:15px; z-index:1001; background:white; border:none; border-radius:50%; width:40px; height:40px; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 10px rgba(0,0,0,0.5); cursor:pointer;"><i class="fas fa-arrow-left" style="color:#333; font-size:20px;"></i></button><div class="player-mask" style="width:60px; height:60px; position:absolute; right:0; top:0; z-index:1000;"></div><iframe src="https://drive.google.com/file/d/${id}/preview" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe>`;
         document.getElementById('videoOverlay').style.display = 'flex';
     } else if (type === 'pdf') {
@@ -147,6 +152,7 @@ window.checkAccess = function(id, type, cardId) {
     }
 };
 
+// App Exit Logic
 function confirmAppExit() {
     if (window.AppInventor) { window.AppInventor.setWebViewString("close"); }
     else { document.getElementById('exitModal').style.display = 'none'; }
@@ -160,6 +166,7 @@ window.forceExit = function() {
     document.getElementById('exitModal').style.display = 'flex';
 };
 
+// Utility Closures
 window.logoutUser = () => { if(auth) auth.signOut().then(() => { window.location.href = "logout_success.html"; }); };
 window.closeLoginPopup = () => { document.getElementById('loginAlertModal').style.display = 'none'; };
 window.closeVideo = () => { document.getElementById('videoOverlay').style.display = 'none'; document.getElementById('videoFrameContainer').innerHTML = ""; };

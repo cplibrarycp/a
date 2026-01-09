@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D | THRIPUDI LIBRARY</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+</head>
+<body>
+<header>
+    <div class="container navbar">
+        <a href="dashboard.html" class="logo-container">
+            <span class="logo-text">THRIPUDI LIBRARY</span>
+            <img src="assets/cover/logo.png" class="logo-img">
+        </a>
+        <div class="nav-links">
+            <a class="nav-item" href="dashboard.html">Home</a>
+            <a class="nav-item" href="collection.html">ശേഖരം</a>
+            <a class="nav-item" href="about.html">About</a>
+            <a class="nav-item" href="contact.html">Contact</a>
+            <div class="user-profile" id="user-profile-btn">
+                <img id="user-avatar-img" class="user-avatar-small" src="assets/cover/default_user.jpg">
+                <span><span id="display-name">...</span> <i class="fas fa-caret-down"></i></span>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <a href="settings.html">Settings</a>
+                    <a href="history.html">History</a>
+                    <a href="javascript:void(0)" onclick="logoutUser()" style="color:red;">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<section class="collection-section">
+    <div class="container">
+        <h1 style="color:#004D40; text-align:center; margin-bottom:30px;">D</h1>
+        <div class="library-container">
+            
+      <div class="book-card" id="card-1j7edDifk1dSm-W9TP2kAVKvaN-80GI_F">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/86.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1j7edDifk1dSm-W9TP2kAVKvaN-80GI_F', 'pdf', 'card-1j7edDifk1dSm-W9TP2kAVKvaN-80GI_F')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1j7edDifk1dSm-W9TP2kAVKvaN-80GI_F"></div>
+        </div>
+        <div class="book-title">Daaru Choro Hindi</div>
+      </div>
+
+      <div class="book-card" id="card-1m2TxKROxBNr1XxmYJNJQZTuVaP051m7i">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/30.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1m2TxKROxBNr1XxmYJNJQZTuVaP051m7i', 'pdf', 'card-1m2TxKROxBNr1XxmYJNJQZTuVaP051m7i')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1m2TxKROxBNr1XxmYJNJQZTuVaP051m7i"></div>
+        </div>
+        <div class="book-title">Designing_Destiny_Hindi_Niyati_Ka</div>
+      </div>
+
+      <div class="book-card" id="card-1OCOEKq0VJebyzvu5b3nv566QJlS_pp0H">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/2.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1OCOEKq0VJebyzvu5b3nv566QJlS_pp0H', 'pdf', 'card-1OCOEKq0VJebyzvu5b3nv566QJlS_pp0H')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1OCOEKq0VJebyzvu5b3nv566QJlS_pp0H"></div>
+        </div>
+        <div class="book-title">Dar Ke Aage Jeet He</div>
+      </div>
+
+      <div class="book-card" id="card-1u8yHlGbUsN_2YnMxJPGGpO6UccQzdqlM">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/28.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1u8yHlGbUsN_2YnMxJPGGpO6UccQzdqlM', 'pdf', 'card-1u8yHlGbUsN_2YnMxJPGGpO6UccQzdqlM')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1u8yHlGbUsN_2YnMxJPGGpO6UccQzdqlM"></div>
+        </div>
+        <div class="book-title">Dhanvan_To_Banna_Hi_Chahiye</div>
+      </div>
+
+      <div class="book-card" id="card-1W7lm19zGzWDg1M73UuxfBUIY0RZV6aP9">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/45.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1W7lm19zGzWDg1M73UuxfBUIY0RZV6aP9', 'pdf', 'card-1W7lm19zGzWDg1M73UuxfBUIY0RZV6aP9')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1W7lm19zGzWDg1M73UuxfBUIY0RZV6aP9"></div>
+        </div>
+        <div class="book-title">DIGITAL_MARKETING_GUIDE_डिजिटल_मार्केटिंग</div>
+      </div>
+
+      <div class="book-card" id="card-1LuLSkmnEkNM4CRgaHHDuK9IOZoX53QZv">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/59.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1LuLSkmnEkNM4CRgaHHDuK9IOZoX53QZv', 'pdf', 'card-1LuLSkmnEkNM4CRgaHHDuK9IOZoX53QZv')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1LuLSkmnEkNM4CRgaHHDuK9IOZoX53QZv"></div>
+        </div>
+        <div class="book-title">Daulat Aur Safalta Ki Raah</div>
+      </div>
+
+      <div class="book-card" id="card-1gcJO3nM_pviBkFnhVCzfEhVO7NCa3CJD">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/24.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1gcJO3nM_pviBkFnhVCzfEhVO7NCa3CJD', 'pdf', 'card-1gcJO3nM_pviBkFnhVCzfEhVO7NCa3CJD')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1gcJO3nM_pviBkFnhVCzfEhVO7NCa3CJD"></div>
+        </div>
+        <div class="book-title">Dekh Lenge Yaar (Hindi Edition)</div>
+      </div>
+
+      <div class="book-card" id="card-1HHc5K5NnD6oJO9Rcync9ELHVN5W8iiaX">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/50.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1HHc5K5NnD6oJO9Rcync9ELHVN5W8iiaX', 'pdf', 'card-1HHc5K5NnD6oJO9Rcync9ELHVN5W8iiaX')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1HHc5K5NnD6oJO9Rcync9ELHVN5W8iiaX"></div>
+        </div>
+        <div class="book-title">Dheerubhai Ambani</div>
+      </div>
+
+      <div class="book-card" id="card-1iMbWlaOiFDATzVGiEk-YuVANmYykkhSW">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/100.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1iMbWlaOiFDATzVGiEk-YuVANmYykkhSW', 'pdf', 'card-1iMbWlaOiFDATzVGiEk-YuVANmYykkhSW')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1iMbWlaOiFDATzVGiEk-YuVANmYykkhSW"></div>
+        </div>
+        <div class="book-title">Dr. Kumar Vishwas - Koi Deewana Kehta Hai</div>
+      </div>
+
+      <div class="book-card" id="card-1lMXPy2W28bESUuhete5jGpd4OVtXPCge">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/24.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1lMXPy2W28bESUuhete5jGpd4OVtXPCge', 'pdf', 'card-1lMXPy2W28bESUuhete5jGpd4OVtXPCge')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1lMXPy2W28bESUuhete5jGpd4OVtXPCge"></div>
+        </div>
+        <div class="book-title">Dark Room</div>
+      </div>
+
+      <div class="book-card" id="card-1QPM3oekAZPDxxFPXXZhFUKLI0NHBpMgE">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/53.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1QPM3oekAZPDxxFPXXZhFUKLI0NHBpMgE', 'pdf', 'card-1QPM3oekAZPDxxFPXXZhFUKLI0NHBpMgE')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1QPM3oekAZPDxxFPXXZhFUKLI0NHBpMgE"></div>
+        </div>
+        <div class="book-title">Dhoop ke Sikke Ek Kavyamay Yatra</div>
+      </div>
+
+      <div class="book-card" id="card-1lzDFsuHOFD4zxOsoxOso-z_nxg6h3eRQ">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/20.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1lzDFsuHOFD4zxOsoxOso-z_nxg6h3eRQ', 'pdf', 'card-1lzDFsuHOFD4zxOsoxOso-z_nxg6h3eRQ')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1lzDFsuHOFD4zxOsoxOso-z_nxg6h3eRQ"></div>
+        </div>
+        <div class="book-title">Dr. BABASAHEB AMBEDKAR WRITINGS AND SPEECHES</div>
+      </div>
+
+      <div class="book-card" id="card-1QjdDjc1zUhmH8eeJaZhdH9hh0HF0ShBI">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/45.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1QjdDjc1zUhmH8eeJaZhdH9hh0HF0ShBI', 'pdf', 'card-1QjdDjc1zUhmH8eeJaZhdH9hh0HF0ShBI')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1QjdDjc1zUhmH8eeJaZhdH9hh0HF0ShBI"></div>
+        </div>
+        <div class="book-title">Dark Horse Ek Ankahi Dastan</div>
+      </div>
+
+      <div class="book-card" id="card-13LMI1u_IPNeeFJCI4jLKoWOJZpMmmneW">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/43.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('13LMI1u_IPNeeFJCI4jLKoWOJZpMmmneW', 'pdf', 'card-13LMI1u_IPNeeFJCI4jLKoWOJZpMmmneW')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-13LMI1u_IPNeeFJCI4jLKoWOJZpMmmneW"></div>
+        </div>
+        <div class="book-title">Dharti Se Sitaron Tak Pehli Yatra</div>
+      </div>
+
+      <div class="book-card" id="card-14j4EzMmiz1laXgDqLHKNkY2NW4gW0hDT">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/89.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('14j4EzMmiz1laXgDqLHKNkY2NW4gW0hDT', 'pdf', 'card-14j4EzMmiz1laXgDqLHKNkY2NW4gW0hDT')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-14j4EzMmiz1laXgDqLHKNkY2NW4gW0hDT"></div>
+        </div>
+        <div class="book-title">Dynamic Memory Methods</div>
+      </div>
+
+      <div class="book-card" id="card-1Okn-k5V2kZUO1qA2_E6o1JB2yvdtA5_l">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/88.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1Okn-k5V2kZUO1qA2_E6o1JB2yvdtA5_l', 'pdf', 'card-1Okn-k5V2kZUO1qA2_E6o1JB2yvdtA5_l')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1Okn-k5V2kZUO1qA2_E6o1JB2yvdtA5_l"></div>
+        </div>
+        <div class="book-title">Dhyaan (Hindi)</div>
+      </div>
+
+      <div class="book-card" id="card-1Sw-b4WH0SNt_Iaf-aTZnJd3tyyca7tyC">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/34.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1Sw-b4WH0SNt_Iaf-aTZnJd3tyyca7tyC', 'pdf', 'card-1Sw-b4WH0SNt_Iaf-aTZnJd3tyyca7tyC')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1Sw-b4WH0SNt_Iaf-aTZnJd3tyyca7tyC"></div>
+        </div>
+        <div class="book-title">Discover Your Destiny (Hindi)</div>
+      </div>
+
+      <div class="book-card" id="card-1UyfI3bX3uFAnBz5zKiLJnFMcV_5Qfrv8">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/4.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1UyfI3bX3uFAnBz5zKiLJnFMcV_5Qfrv8', 'pdf', 'card-1UyfI3bX3uFAnBz5zKiLJnFMcV_5Qfrv8')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1UyfI3bX3uFAnBz5zKiLJnFMcV_5Qfrv8"></div>
+        </div>
+        <div class="book-title">Dainik Prerna</div>
+      </div>
+
+      <div class="book-card" id="card-1_46MH2-IXFiCzazKRxK7FvUEWpd-hafb">
+        <div class="image-wrapper">
+          <img class="book-cover" src="assets/cover/1.jpg" loading="lazy">
+          <div class="read-overlay">
+            <button class="overlay-btn" onclick="checkAccess('1_46MH2-IXFiCzazKRxK7FvUEWpd-hafb', 'pdf', 'card-1_46MH2-IXFiCzazKRxK7FvUEWpd-hafb')">വായിക്കാം</button>
+          </div>
+          <div class="audio-player-box" id="player-1_46MH2-IXFiCzazKRxK7FvUEWpd-hafb"></div>
+        </div>
+        <div class="book-title">DHAN KO AAKARSHIT KAISE KAREN (Hindi)</div>
+      </div>
+        </div>
+    </div>
+</section>
+
+<div id="loginAlertModal"><div class="popup-box"><img src="assets/cover/logo.png" style="height:45px; margin-bottom:10px;"><h3 style="color:#004D40; margin:5px 0;">ത്രിപുടി ലൈബ്രറി</h3><p id="loginMsg" style="font-weight:600;"></p><br><div style="display:flex; justify-content:center; gap:15px;"><a href="login.html" id="login-btn-link" style="padding:10px 25px; background:#00897B; color:white; text-decoration:none; border-radius:5px; font-weight:600;">ലോഗിൻ ചെയ്യൂ</a><button onclick="closeLoginPopup()" style="padding:10px 25px; border:none; background:#eee; border-radius:5px; cursor:pointer; color:#555;">ഇപ്പോൾ വേണ്ട</button></div></div></div>
+<div id="videoOverlay" class="video-popup-overlay"><div class="video-window"><button class="close-video-btn" onclick="closeVideo()"><i class="fas fa-arrow-left"></i></button><div id="videoFrameContainer" style="width:100%; height:100%; position:relative;"></div></div></div>
+<div id="pdfModal"><div id="modalHeader"><span>ത്രിപുടി ലൈബ്രറി - വായനമുറി</span><button onclick="closePdfModal()" style="color:white; background:none; border:none; cursor:pointer; font-size:1.5em;"><i class="fas fa-times"></i></button></div><div class="iframe-container"><div class="player-mask" style="width:60px; height:60px;"></div><iframe id="pdfFrame" style="width:100%; height:100%; border:none;" allow="autoplay"></iframe></div></div>
+
+<footer>
+    <div class="container footer-content">
+        <div class="footer-line-one">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="https://wa.me/919447333333" target="_blank" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+            <span class="footer-divider">|</span>
+            <a href="privacy.html">സ്വകാര്യതാ നയം</a>
+            <span class="footer-divider">|</span>
+            <a href="terms.html">നിബന്ധനകൾ</a>
+        </div>
+        <div class="footer-line-two">© 2025 THRIPUDI LIBRARY. എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം.</div>
+    </div>
+</footer>
+
+<script src="assets/scripts.js"></script>
+</body>
+</html>
